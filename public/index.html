@@ -1,45 +1,97 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>InstaWindowTool - インスタグラム表示用ガジェット</title>
 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.22/vue.min.js'></script><!-- 2019-01-25 https://cdnjs.com/libraries/vue -->
-  </head>
-  <body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InstaWindowTool - インスタグラム表示用ガジェット</title>
+  <!-- UIkit CSS -->
+  <link rel="stylesheet" href="/css/uikit.min.css" />
 
-  <div id="app">
-    <div>
-      これを貼り付けてね
-      <pre>
-        <code>
-&lt;div id="insta-widget" class="iswg-base" data-username="{{username}}" data-display-image-count="{{displayImageCount}}" {{renderDataset}}&gt;&lt;/div&gt;
-&lt;script src="{{location.origin}}/javascripts/main.js"&gt;&lt;/script&gt;
-        </code>
-      </pre>
-      <input v-model="username" />
-      <input v-model="displayImageCount" type="number" />
-      <label>
-        <input type="checkbox" v-model="options.showIcon">
-        アイコンを表示
-      </label>
-      <label>
-        <input type="checkbox" v-model="options.showBiography">
-        ユーザー紹介文を表示
-      </label>
-      <label>
-        <input type="checkbox" v-model="options.showFollowBtn">
-        フォローボタンを表示
-      </label>
-      <label>
-        <input type="checkbox" v-model="options.showUsername">
-        ユーザー名を表示
-      </label>
+  <!-- UIkit JS -->
+  <script src="/js/uikit.min.js"></script>
+  <script src="/js/uikit-icons.min.js"></script>
+
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.22/vue.min.js'></script>
+  <!-- 2019-01-25 https://cdnjs.com/libraries/vue -->
+</head>
+
+<body>
+  <div class="uk-navbar-container">
+
+    <nav class="uk-navbar uk-container" uk-navbar>
+
+      <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+          <li class="uk-active"><a href="/">Insta Window</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="uk-container" id="app">
+    <div class="uk-child-width-expand@s" uk-grid>
+      <div>
+        <div>
+          これを貼り付けてね
+          <pre><code>&lt;div id="insta-widget" class="iswg-base" data-username="{{username}}" data-display-image-count="{{displayImageCount}}" {{renderDataset}}&gt;&lt;/div&gt;
+&lt;script src="{{location.origin}}/javascripts/main.js"&gt;&lt;/script&gt;</code></pre>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <input v-model="username" id="username" type="text" />
+              <label for="username">ユーザー名</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <input v-model="displayImageCount" id="displayImageCount" type="number" />
+              <label for="displayImageCount">表示画像数</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <p>
+                <label>
+                  <input type="checkbox" v-model="options.showIcon">
+                  <span>アイコンを表示</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input type="checkbox" v-model="options.showBiography">
+                  <span>ユーザー紹介文を表示</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input type="checkbox" v-model="options.showFollowBtn">
+                  <span>フォローボタンを表示</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input type="checkbox" v-model="options.showUsername">
+                  <span>ユーザー名を表示</span>
+                </label>
+              </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+
+        <div id="insta-widget" class="iswg-base" v-bind:data-username="username"
+          v-bind:data-display-image-count="displayImageCount" v-bind:data-show-icon="String(options.showIcon)"
+          v-bind:data-show-biography="String(options.showBiography)"
+          v-bind:data-show-follow-btn="String(options.showFollowBtn)"
+          v-bind:data-show-username="String(options.showUsername)"></div>
+      </div>
     </div>
   </div>
-
-  <div id="insta-widget" class="iswg-base" data-username="akb48" data-display-image-count="9"></div>
 
   <script>
     var app = new Vue({
@@ -53,6 +105,9 @@
           showFollowBtn: true,
           showUsername: true,
         }
+      },
+      updated: function () {
+        window.instaWindow();
       },
 
       computed: {
@@ -70,13 +125,14 @@
       },
       methods: {
         kebabCase: function (str) {
-          return str.replace(/[A-Z]/g, function(s){
+          return str.replace(/[A-Z]/g, function (s) {
             return '-' + s.charAt(0).toLowerCase();
           });
         }
       },
     })
   </script>
-  <script src="/javascripts/main.js?a=1&b=3"></script>
-  </body>
+  <script src="/js/main.js"></script>
+</body>
+
 </html>

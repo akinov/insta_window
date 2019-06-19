@@ -29,7 +29,7 @@ if (typeof Object.assign != 'function') {
   });
 }
 
-(function() {
+window.instaWindow = (function () {
   var instagramURL = 'https://www.instagram.com/';
   var req = new XMLHttpRequest();
   var baseDom = document.getElementById('insta-widget');
@@ -45,8 +45,9 @@ if (typeof Object.assign != 'function') {
     showFollowBtn: true,
     showUsername: true,
   }, baseDom.dataset);
+  console.log(options);
 
-  req.onreadystatechange = function() {
+  req.onreadystatechange = function () {
     if (req.readyState == 4) { // 通信の完了時
       if (req.status == 200) { // 通信の成功時
         var json_string = req.response.split("window._sharedData = ")[1];
@@ -60,6 +61,7 @@ if (typeof Object.assign != 'function') {
             url: datas[i].node.thumbnail_src,
           });
         }
+        clearDom();
         renderDom();
         renderStyle();
       }
@@ -68,6 +70,10 @@ if (typeof Object.assign != 'function') {
 
   req.open('GET', instagramURL + options.username, true);
   req.send(null);
+
+  function clearDom() {
+    baseDom.innerHTML = "";
+  }
 
   function renderDom() {
     // プロフィール追加
@@ -88,7 +94,7 @@ if (typeof Object.assign != 'function') {
     }
 
     if (toBoolean(options.showIcon)) {
-      profileDom.insertAdjacentHTML('afterbegin','<a href="'+instagramURL+options.username+'" target="_blank" rel="noopener"><img class="iswg-icon" src="'+user.profile_pic_url+'"></a>');
+      profileDom.insertAdjacentHTML('afterbegin', '<a href="' + instagramURL + options.username + '" target="_blank" rel="noopener"><img class="iswg-icon" src="' + user.profile_pic_url + '"></a>');
     }
 
     // 写真追加
@@ -206,4 +212,6 @@ if (typeof Object.assign != 'function') {
 
     return booleanStr.toLowerCase() === "true";
   }
-}.call(this));
+});
+
+instaWindow();
