@@ -1,3 +1,12 @@
+/*!
+ * InstaWindowTool
+ * https://insta-window-tool.web.app/
+ *
+ * Copyright Akinov and other contributors
+ * Released under the MIT license
+ *
+ */
+
 // Polyfill Object.assign
 if (typeof Object.assign != 'function') {
   // Must be writable: true, enumerable: false, configurable: true
