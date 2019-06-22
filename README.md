@@ -1,3 +1,7 @@
 # insta_window
 
-https://insta-window-tool.firebaseapp.com/
+Create Instagram widget
+
+https://insta-window-tool.web.app/
+
+
