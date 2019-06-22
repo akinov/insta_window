@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>InstaWindowTool - インスタグラム表示用ガジェット</title>
+  <title>無料インスタグラムブログパーツ作成 - InstaWindowTool</title>
   <!-- UIkit CSS -->
   <link rel="stylesheet" href="/css/uikit.min.css" />
 
@@ -24,71 +24,85 @@
 
       <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
-          <li class="uk-active"><a href="/">Insta Window</a></li>
+          <li class="uk-active">
+            <h1 class="uk-text-lead"><a href="/">無料インスタグラムブログパーツ作成ツール InstaWindow</a></h1>
+          </li>
+        </ul>
+      </div>
+
+      <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+          <li class="uk-active">
+            <a href="/about.html">About</a>
+          </li>
         </ul>
       </div>
     </nav>
   </div>
-  <div class="uk-container" id="app">
+  <div class="uk-container uk-margin" id="app">
     <div class="uk-child-width-expand@s" uk-grid>
-      <div>
-        <div>
-          これを貼り付けてね
-          <pre><code>&lt;div id="insta-widget" class="iswg-base" data-username="{{username}}" data-display-image-count="{{displayImageCount}}" {{renderDataset}}&gt;&lt;/div&gt;
-&lt;script src="{{location.origin}}/js/main.js"&gt;&lt;/script&gt;</code></pre>
-
-          <div class="row">
-            <div class="input-field col s12">
-              <input v-model="username" id="username" type="text" />
-              <label for="username">ユーザー名</label>
+      <div class="row">
+        <h2 class="uk-text-lead">設定</h2>
+        <div class="input-field col s12">
+          <div class="uk-margin">
+            <label class="uk-form-label" for="username">ユーザー名</label>
+            <div class="uk-form-controls">
+              <input v-model="username" id="username" type="text" class="uk-input" />
             </div>
           </div>
 
-          <div class="row">
-            <div class="input-field col s12">
-              <input v-model="displayImageCount" id="displayImageCount" type="number" />
-              <label for="displayImageCount">表示画像数</label>
-            </div>
+          <div class="uk-margin">
+            <label class="uk-form-label" for="displayImageCount">表示画像数</label>
+            <input v-model="displayImageCount" id="displayImageCount" type="number" class="uk-input" />
           </div>
 
-          <div class="row">
-            <div class="input-field col s12">
-              <p>
-                <label>
-                  <input type="checkbox" v-model="options.showIcon">
-                  <span>アイコンを表示</span>
-                </label>
-              </p>
-              <p>
-                <label>
-                  <input type="checkbox" v-model="options.showBiography">
-                  <span>ユーザー紹介文を表示</span>
-                </label>
-              </p>
-              <p>
-                <label>
-                  <input type="checkbox" v-model="options.showFollowBtn">
-                  <span>フォローボタンを表示</span>
-                </label>
-              </p>
-              <p>
-                <label>
-                  <input type="checkbox" v-model="options.showUsername">
-                  <span>ユーザー名を表示</span>
-                </label>
-              </p>
-
-            </div>
+          <div class="uk-margin">
+            <label>
+              <input type="checkbox" v-model="options.showIcon" class="uk-checkbox">
+              <span class="uk-form-label">アイコンを表示</span>
+            </label>
           </div>
+
+          <div class="uk-margin">
+            <label>
+              <input type="checkbox" v-model="options.showBiography" class="uk-checkbox">
+              <span class="uk-form-label">ユーザー紹介文を表示</span>
+            </label>
+          </div>
+
+          <div class="uk-margin">
+            <label>
+              <input type="checkbox" v-model="options.showFollowBtn" class="uk-checkbox">
+              <span class="uk-form-label">フォローボタンを表示</span>
+            </label>
+          </div>
+          <div class="uk-margin">
+            <label>
+              <input type="checkbox" v-model="options.showUsername" class="uk-checkbox">
+              <span class="uk-form-label">ユーザー名を表示</span>
+            </label>
+          </div>
+
         </div>
       </div>
       <div>
+        <h2 class="uk-text-lead">プレビュー</h2>
 
         <div id="insta-widget" class="iswg-base" v-bind:data-username="username"
           v-bind:data-display-image-count="displayImageCount" v-bind:data-show-icon="String(options.showIcon)"
           v-bind:data-show-biography="String(options.showBiography)"
           v-bind:data-show-follow-btn="String(options.showFollowBtn)"
-          v-bind:data-show-username="String(options.showUsername)"></div>
+          v-bind:data-show-username="String(options.showUsername)">
+        </div>
+
+
+        <h2 class="uk-text-lead">コード</h2>
+        <p>このコードを貼り付けて使用してください</p>
+        <textarea id="iw-code" class="uk-textarea" rows="3" readonly>&lt;div id="insta-widget" class="iswg-base" data-username="{{username}}" data-display-image-count="{{displayImageCount}}" {{renderDataset}}&gt;&lt;/div&gt;
+&lt;script src="{{location.origin}}/js/main.js"&gt;&lt;/script&gt;</textarea>
+        <div>
+          <button class="uk-button uk-button-primary" v-on:click="copy">コピーする</button>
+        </div>
       </div>
     </div>
   </div>
@@ -128,6 +142,10 @@
           return str.replace(/[A-Z]/g, function (s) {
             return '-' + s.charAt(0).toLowerCase();
           });
+        },
+        copy: function (e) {
+          document.getElementById("iw-code").select();
+          document.execCommand("copy");
         }
       },
     })
