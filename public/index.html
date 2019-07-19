@@ -73,6 +73,11 @@
           </div>
 
           <div class="uk-margin">
+            <label class="uk-form-label" for="wrapperWidth">ブログパーツ幅</label>
+            <input v-model="options.wrapperWidth" id="wrapperWidth" type="number" class="uk-input" />
+          </div>
+
+          <div class="uk-margin">
             <label>
               <input type="checkbox" v-model="options.showIcon" class="uk-checkbox">
               <span class="uk-form-label">アイコンを表示</span>
@@ -108,7 +113,7 @@
           v-bind:data-display-image-count="displayImageCount" v-bind:data-show-icon="String(options.showIcon)"
           v-bind:data-show-biography="String(options.showBiography)"
           v-bind:data-show-follow-btn="String(options.showFollowBtn)"
-          v-bind:data-show-username="String(options.showUsername)">
+          v-bind:data-show-username="String(options.showUsername)" v-bind:data-wrapper-width="options.wrapperWidth">
         </div>
 
 
@@ -124,17 +129,19 @@
   </div>
 
   <script>
+    var defaultOptions = {
+      wrapperWidth: 300,
+      showIcon: true,
+      showBiography: true,
+      showFollowBtn: true,
+      showUsername: true,
+    };
     var app = new Vue({
       el: '#app',
       data: {
         username: 'akb48', // 取得対象のユーザー名
         displayImageCount: 9, // 表示する画像数
-        options: {
-          showIcon: true,
-          showBiography: true,
-          showFollowBtn: true,
-          showUsername: true,
-        }
+        options: JSON.parse(JSON.stringify(defaultOptions))
       },
       updated: function () {
         window.instaWindow();
@@ -145,8 +152,8 @@
           var that = this;
           var optionArr = [];
           var options = this.options;
-          ['showIcon', 'showBiography', 'showFollowBtn', 'showUsername'].forEach(function (key, index) {
-            if (options[key] === false) {
+          Object.keys(defaultOptions).forEach(function (key) {
+            if (options[key] != defaultOptions[key]) {
               optionArr.push('data-' + that.kebabCase(key) + '=' + options[key]);
             }
           });

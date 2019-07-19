@@ -49,12 +49,12 @@ window.instaWindow = (function () {
     // default options
     username: 'akb48', // 取得対象のユーザー名
     displayImageCount: 9, // 表示する画像数
+    wrapperWidth: 300,
     showIcon: true,
     showBiography: true,
     showFollowBtn: true,
     showUsername: true,
   }, baseDom.dataset);
-  console.log(options);
 
   req.onreadystatechange = function () {
     if (req.readyState == 4) { // 通信の完了時
@@ -139,7 +139,7 @@ window.instaWindow = (function () {
         'border-radius': '5px',
         'box-sizing': 'border-box',
         padding: '10px',
-        width: '300px'
+        width: `${options.wrapperWidth}px`
       },
       profile: {
         'text-align': 'center'
