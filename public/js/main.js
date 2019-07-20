@@ -139,7 +139,7 @@ window.instaWindow = (function () {
         'border-radius': '5px',
         'box-sizing': 'border-box',
         padding: '10px',
-        width: `${options.wrapperWidth}px`
+        width: Number(options.wrapperWidth) > 10 ? `${options.wrapperWidth}px` : '100%'
       },
       profile: {
         'text-align': 'center'
