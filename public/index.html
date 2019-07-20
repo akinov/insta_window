@@ -154,7 +154,11 @@
           var options = this.options;
           Object.keys(defaultOptions).forEach(function (key) {
             if (options[key] != defaultOptions[key]) {
-              optionArr.push('data-' + that.kebabCase(key) + '=' + options[key]);
+              var tmp = 'data-' + that.kebabCase(key);
+              if (String(options[key]).length > 0) {
+                tmp += '=' + options[key]
+              }
+              optionArr.push(tmp);
             }
           });
           return optionArr.join(' ')
