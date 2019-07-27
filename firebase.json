@@ -5,6 +5,13 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/js/main.js",
+        "destination": "/v1/insta-window.js",
+        "type": 301
+      }
     ]
   }
 }
