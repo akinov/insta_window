@@ -103,6 +103,9 @@
               <span class="uk-form-label">ユーザー名を表示</span>
             </label>
           </div>
+          <div class="uk-margin">
+            <button class="uk-button uk-button-primary" v-on:click="reRender">プレビューを更新</button>
+          </div>
 
         </div>
       </div>
@@ -143,9 +146,6 @@
         displayImageCount: 9, // 表示する画像数
         options: JSON.parse(JSON.stringify(defaultOptions))
       },
-      updated: function () {
-        window.instaWindow();
-      },
 
       computed: {
         renderDataset: function () {
@@ -173,6 +173,9 @@
         copy: function (e) {
           document.getElementById("iw-code").select();
           document.execCommand("copy");
+        },
+        reRender: function () {
+          window.instaWindow();
         }
       },
     })
