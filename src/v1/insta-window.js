@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * InstaWindowTool
  * https://insta-window-tool.web.app/
@@ -16,7 +14,6 @@ if (typeof Object.assign != 'function') {
     value: function assign(target, varArgs) {
       // .length of function is 2
       'use strict';
-
       if (target == null) {
         // TypeError if undefined or null
         throw new TypeError('Cannot convert undefined or null to object');
@@ -44,25 +41,28 @@ if (typeof Object.assign != 'function') {
   });
 }
 
-window.instaWindow = function () {
+window.instaWindow = function() {
   var instagramURL = 'https://www.instagram.com/';
   var req = new XMLHttpRequest();
   var baseDom = document.getElementById('insta-widget');
   var images = [];
   var user;
 
-  var options = Object.assign({
-    // default options
-    username: 'akb48', // 取得対象のユーザー名
-    displayImageCount: 9, // 表示する画像数
-    wrapperWidth: 300,
-    showIcon: true,
-    showBiography: true,
-    showFollowBtn: true,
-    showUsername: true
-  }, baseDom.dataset);
+  var options = Object.assign(
+    {
+      // default options
+      username: 'akb48', // 取得対象のユーザー名
+      displayImageCount: 9, // 表示する画像数
+      wrapperWidth: 300,
+      showIcon: true,
+      showBiography: true,
+      showFollowBtn: true,
+      showUsername: true
+    },
+    baseDom.dataset
+  );
 
-  req.onreadystatechange = function () {
+  req.onreadystatechange = function() {
     if (req.readyState == 4) {
       // 通信の完了時
       if (req.status == 200) {
@@ -71,7 +71,7 @@ window.instaWindow = function () {
         json_string = json_string.split('};</script>')[0] + '}';
         user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
         var datas = user.edge_owner_to_timeline_media.edges;
-        for (var i in datas) {
+        for (const i in datas) {
           if (i >= options.displayImageCount) break;
           images.push({
             shortcode: datas[i].node.shortcode,
@@ -99,19 +99,39 @@ window.instaWindow = function () {
     baseDom.appendChild(profileDom);
 
     if (toBoolean(options.showFollowBtn)) {
-      profileDom.insertAdjacentHTML('afterbegin', '<a class="iswg-follow-btn" href="' + instagramURL + options.username + '" target="_blank" rel="noopener"><span class="iswg-follow-btn-before"></span>フォロー</a>');
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        '<a class="iswg-follow-btn" href="' +
+          instagramURL +
+          options.username +
+          '" target="_blank" rel="noopener"><span class="iswg-follow-btn-before"></span>フォロー</a>'
+      );
     }
 
     if (toBoolean(options.showBiography)) {
-      profileDom.insertAdjacentHTML('afterbegin', '<div class="iswg-biography">' + user.biography + '</div>');
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        '<div class="iswg-biography">' + user.biography + '</div>'
+      );
     }
 
     if (toBoolean(options.showUsername)) {
-      profileDom.insertAdjacentHTML('afterbegin', '<div class="iswg-name">' + user.full_name + '</div>');
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        '<div class="iswg-name">' + user.full_name + '</div>'
+      );
     }
 
     if (toBoolean(options.showIcon)) {
-      profileDom.insertAdjacentHTML('afterbegin', '<a href="' + instagramURL + options.username + '" target="_blank" rel="noopener"><img class="iswg-icon" src="' + user.profile_pic_url + '"></a>');
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        '<a href="' +
+          instagramURL +
+          options.username +
+          '" target="_blank" rel="noopener"><img class="iswg-icon" src="' +
+          user.profile_pic_url +
+          '"></a>'
+      );
     }
 
     // 写真追加
@@ -119,7 +139,7 @@ window.instaWindow = function () {
     imagesDom.className = 'iswg-images';
     baseDom.appendChild(imagesDom);
 
-    for (var i in images) {
+    for (const i in images) {
       var itemDom = document.createElement('div');
       itemDom.className = 'iswg-images-item';
 
@@ -159,7 +179,10 @@ window.instaWindow = function () {
         'border-radius': '5px',
         'box-sizing': 'border-box',
         padding: '10px',
-        width: Number(options.wrapperWidth) > 10 ? options.wrapperWidth + 'px' : '100%'
+        width:
+          Number(options.wrapperWidth) > 10
+            ? `${options.wrapperWidth}px`
+            : '100%'
       },
       profile: {
         'text-align': 'center'
@@ -187,7 +210,8 @@ window.instaWindow = function () {
         'white-space': 'nowrap'
       },
       'follow-btn-before': {
-        background: 'url(https://insta-window-tool.web.app/ig_icon.png) center no-repeat',
+        background:
+          'url(https://insta-window-tool.web.app/ig_icon.png) center no-repeat',
         'background-size': 'contain',
         content: '',
         display: 'inline-block',
@@ -229,12 +253,12 @@ window.instaWindow = function () {
       }
     };
 
-    Object.keys(style).forEach(function (key) {
+    Object.keys(style).forEach(function(key) {
       var elements = document.querySelectorAll('.iswg-' + key);
 
       if (elements.length === 0) return;
 
-      elements.forEach(function (element, index) {
+      elements.forEach(function(element, index) {
         element.setAttribute('style', styleJsonToStyleString(style[key]));
       });
     });
@@ -242,7 +266,10 @@ window.instaWindow = function () {
 
   // style用jsonを文字列に変換
   function styleJsonToStyleString(jsonString) {
-    return JSON.stringify(jsonString).slice(1, -1).replace(/,/g, ';').replace(/"/g, '');
+    return JSON.stringify(jsonString)
+      .slice(1, -1)
+      .replace(/,/g, ';')
+      .replace(/"/g, '');
   }
 
   // datasetからboolean取得すると文字列になるので変換
