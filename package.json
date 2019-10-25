@@ -1,0 +1,29 @@
+{
+  "name": "insta_window",
+  "version": "1.0.0",
+  "description": "Create Instagram widget",
+  "main": "index.js",
+  "dependencies": {
+    "firebase-tools": "^7.2.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel ./src --out-dir ./public",
+    "deploy": "npm run build & firebase deploy --only hosting"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akinov/insta_window.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akinov/insta_window/issues"
+  },
+  "homepage": "https://github.com/akinov/insta_window#readme"
+}
