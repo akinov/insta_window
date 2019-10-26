@@ -1,257 +1,100 @@
-'use strict';
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/v1/insta-window.js");
+/******/ })
+/************************************************************************/
+/******/ ({
 
-/*!
- * InstaWindowTool
- * https://insta-window-tool.web.app/
- *
- * Copyright Akinov and other contributors
- * Released under the MIT license
- *
- */
+/***/ "./src/v1/insta-window.js":
+/*!********************************!*\
+  !*** ./src/v1/insta-window.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-// Polyfill Object.assign
-if (typeof Object.assign != 'function') {
-  // Must be writable: true, enumerable: false, configurable: true
-  Object.defineProperty(Object, 'assign', {
-    value: function assign(target, varArgs) {
-      // .length of function is 2
-      'use strict';
+eval("/*!\n * InstaWindowTool\n * https://insta-window-tool.web.app/\n *\n * Copyright Akinov and other contributors\n * Released under the MIT license\n *\n */\n// Polyfill Object.assign\nif (typeof Object.assign != 'function') {\n  // Must be writable: true, enumerable: false, configurable: true\n  Object.defineProperty(Object, 'assign', {\n    value: function assign(target, varArgs) {\n      // .length of function is 2\n      'use strict';\n\n      if (target == null) {\n        // TypeError if undefined or null\n        throw new TypeError('Cannot convert undefined or null to object');\n      }\n\n      var to = Object(target);\n\n      for (var index = 1; index < arguments.length; index++) {\n        var nextSource = arguments[index];\n\n        if (nextSource != null) {\n          // Skip over if undefined or null\n          for (var nextKey in nextSource) {\n            // Avoid bugs when hasOwnProperty is shadowed\n            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {\n              to[nextKey] = nextSource[nextKey];\n            }\n          }\n        }\n      }\n\n      return to;\n    },\n    writable: true,\n    configurable: true\n  });\n}\n\nwindow.instaWindow = function () {\n  var instagramURL = 'https://www.instagram.com/';\n  var req = new XMLHttpRequest();\n  var baseDom = document.getElementById('insta-widget');\n  var images = [];\n  var user;\n  var options = Object.assign({\n    // default options\n    username: 'akb48',\n    // 取得対象のユーザー名\n    displayImageCount: 9,\n    // 表示する画像数\n    wrapperWidth: 300,\n    showIcon: true,\n    showBiography: true,\n    showFollowBtn: true,\n    showUsername: true\n  }, baseDom.dataset);\n\n  req.onreadystatechange = function () {\n    if (req.readyState == 4) {\n      // 通信の完了時\n      if (req.status == 200) {\n        // 通信の成功時\n        var json_string = req.response.split('window._sharedData = ')[1];\n        json_string = json_string.split('};</script>')[0] + '}';\n        user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;\n        var datas = user.edge_owner_to_timeline_media.edges;\n\n        for (var i in datas) {\n          if (i >= options.displayImageCount) break;\n          images.push({\n            shortcode: datas[i].node.shortcode,\n            url: datas[i].node.thumbnail_src\n          });\n        }\n\n        clearDom();\n        renderDom();\n        renderStyle();\n      }\n    }\n  };\n\n  req.open('GET', instagramURL + options.username, true);\n  req.send(null);\n\n  function clearDom() {\n    baseDom.innerHTML = '';\n  }\n\n  function renderDom() {\n    // プロフィール追加\n    var profileDom = document.createElement('div');\n    profileDom.className = 'iswg-profile';\n    baseDom.appendChild(profileDom);\n\n    if (toBoolean(options.showFollowBtn)) {\n      profileDom.insertAdjacentHTML('afterbegin', '<a class=\"iswg-follow-btn\" href=\"' + instagramURL + options.username + '\" target=\"_blank\" rel=\"noopener\"><span class=\"iswg-follow-btn-before\"></span>フォロー</a>');\n    }\n\n    if (toBoolean(options.showBiography)) {\n      profileDom.insertAdjacentHTML('afterbegin', '<div class=\"iswg-biography\">' + user.biography + '</div>');\n    }\n\n    if (toBoolean(options.showUsername)) {\n      profileDom.insertAdjacentHTML('afterbegin', '<div class=\"iswg-name\">' + user.full_name + '</div>');\n    }\n\n    if (toBoolean(options.showIcon)) {\n      profileDom.insertAdjacentHTML('afterbegin', '<a href=\"' + instagramURL + options.username + '\" target=\"_blank\" rel=\"noopener\"><img class=\"iswg-icon\" src=\"' + user.profile_pic_url + '\"></a>');\n    } // 写真追加\n\n\n    var imagesDom = document.createElement('div');\n    imagesDom.className = 'iswg-images';\n    baseDom.appendChild(imagesDom);\n\n    for (var i in images) {\n      var itemDom = document.createElement('div');\n      itemDom.className = 'iswg-images-item';\n      var linkDom = document.createElement('a');\n      linkDom.className = 'iswg-image-link';\n      linkDom.href = instagramURL + 'p/' + images[i].shortcode;\n      linkDom.target = '_blank';\n      linkDom.rel = 'noopener';\n      var img = document.createElement('img');\n      img.className = 'iswg-image';\n      img.src = images[i].url;\n      linkDom.appendChild(img);\n      itemDom.appendChild(linkDom);\n      imagesDom.appendChild(itemDom);\n    } // コピーライト追加\n\n\n    var copyrightWrapperDom = document.createElement('div');\n    copyrightWrapperDom.className = 'iswg-copyright-wrapper';\n    var copyrightDom = document.createElement('a');\n    copyrightDom.className = 'iswg-copyright';\n    copyrightDom.textContent = '©';\n    copyrightDom.title = '無料インスタグラムブログパーツ InstaWindow';\n    copyrightDom.href = 'https://insta-window-tool.web.app/';\n    copyrightDom.target = '_blank';\n    copyrightWrapperDom.appendChild(copyrightDom);\n    baseDom.appendChild(copyrightWrapperDom);\n  }\n\n  function renderStyle() {\n    var style = {\n      base: {\n        background: '#fff',\n        border: '1px solid #ccc',\n        'border-radius': '5px',\n        'box-sizing': 'border-box',\n        padding: '10px',\n        width: Number(options.wrapperWidth) > 10 ? \"\".concat(options.wrapperWidth, \"px\") : '100%'\n      },\n      profile: {\n        'text-align': 'center'\n      },\n      name: {\n        'font-size': '20px',\n        'font-weight': 'bold',\n        margin: '20px 0 10px'\n      },\n      biography: {\n        'font-size': '12px',\n        margin: '0 0 10px'\n      },\n      'follow-btn': {\n        color: '#fff',\n        'background-color': '#3897f0',\n        'border-radius': '4px',\n        display: 'inline-block',\n        'font-size': '14px',\n        'line-height': '24px',\n        margin: '0 0 10px',\n        padding: '6px 12px',\n        'text-align': 'center',\n        'text-decoration': 'none',\n        'white-space': 'nowrap'\n      },\n      'follow-btn-before': {\n        background: 'url(https://insta-window-tool.web.app/ig_icon.png) center no-repeat',\n        'background-size': 'contain',\n        content: '',\n        display: 'inline-block',\n        height: '20px',\n        margin: '-3px 5px 0 0',\n        width: '20px',\n        'vertical-align': 'middle'\n      },\n      images: {\n        display: 'flex',\n        'flex-wrap': 'wrap'\n      },\n      'images-item': {\n        'box-sizing': 'border-box',\n        padding: '3px',\n        width: '33.33%'\n      },\n      'image-link': {\n        'text-decoration': 'none'\n      },\n      image: {\n        width: '100%'\n      },\n      icon: {\n        border: '1px solid #dbdbdb',\n        'border-radius': '50%',\n        width: '33%'\n      },\n      'copyright-wrapper': {\n        'font-size': '8px',\n        'line-height': 1,\n        'text-align': 'right',\n        'padding-right': '5px'\n      },\n      copyright: {\n        color: '#ccc',\n        'font-size': '8px',\n        'text-decoration': 'none'\n      }\n    };\n    Object.keys(style).forEach(function (key) {\n      var elements = document.querySelectorAll('.iswg-' + key);\n      var length = elements.length;\n      if (length === 0) return;\n\n      for (var i = 0; i < length; i++) {\n        elements[i].setAttribute('style', styleJsonToStyleString(style[key]));\n      }\n    });\n  } // style用jsonを文字列に変換\n\n\n  function styleJsonToStyleString(jsonString) {\n    return JSON.stringify(jsonString).slice(1, -1).replace(/,/g, ';').replace(/\"/g, '');\n  } // datasetからboolean取得すると文字列になるので変換\n\n\n  function toBoolean(booleanStr) {\n    // もともとbool値の場合はそのまま返す\n    if (typeof booleanStr === 'boolean') return booleanStr;\n    return booleanStr.toLowerCase() === 'true';\n  }\n};\n\ninstaWindow();\n\n//# sourceURL=webpack:///./src/v1/insta-window.js?");
 
-      if (target == null) {
-        // TypeError if undefined or null
-        throw new TypeError('Cannot convert undefined or null to object');
-      }
+/***/ })
 
-      var to = Object(target);
-
-      for (var index = 1; index < arguments.length; index++) {
-        var nextSource = arguments[index];
-
-        if (nextSource != null) {
-          // Skip over if undefined or null
-          for (var nextKey in nextSource) {
-            // Avoid bugs when hasOwnProperty is shadowed
-            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-              to[nextKey] = nextSource[nextKey];
-            }
-          }
-        }
-      }
-      return to;
-    },
-    writable: true,
-    configurable: true
-  });
-}
-
-window.instaWindow = function () {
-  var instagramURL = 'https://www.instagram.com/';
-  var req = new XMLHttpRequest();
-  var baseDom = document.getElementById('insta-widget');
-  var images = [];
-  var user;
-
-  var options = Object.assign({
-    // default options
-    username: 'akb48', // 取得対象のユーザー名
-    displayImageCount: 9, // 表示する画像数
-    wrapperWidth: 300,
-    showIcon: true,
-    showBiography: true,
-    showFollowBtn: true,
-    showUsername: true
-  }, baseDom.dataset);
-
-  req.onreadystatechange = function () {
-    if (req.readyState == 4) {
-      // 通信の完了時
-      if (req.status == 200) {
-        // 通信の成功時
-        var json_string = req.response.split('window._sharedData = ')[1];
-        json_string = json_string.split('};</script>')[0] + '}';
-        user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
-        var datas = user.edge_owner_to_timeline_media.edges;
-        for (var i in datas) {
-          if (i >= options.displayImageCount) break;
-          images.push({
-            shortcode: datas[i].node.shortcode,
-            url: datas[i].node.thumbnail_src
-          });
-        }
-        clearDom();
-        renderDom();
-        renderStyle();
-      }
-    }
-  };
-
-  req.open('GET', instagramURL + options.username, true);
-  req.send(null);
-
-  function clearDom() {
-    baseDom.innerHTML = '';
-  }
-
-  function renderDom() {
-    // プロフィール追加
-    var profileDom = document.createElement('div');
-    profileDom.className = 'iswg-profile';
-    baseDom.appendChild(profileDom);
-
-    if (toBoolean(options.showFollowBtn)) {
-      profileDom.insertAdjacentHTML('afterbegin', '<a class="iswg-follow-btn" href="' + instagramURL + options.username + '" target="_blank" rel="noopener"><span class="iswg-follow-btn-before"></span>フォロー</a>');
-    }
-
-    if (toBoolean(options.showBiography)) {
-      profileDom.insertAdjacentHTML('afterbegin', '<div class="iswg-biography">' + user.biography + '</div>');
-    }
-
-    if (toBoolean(options.showUsername)) {
-      profileDom.insertAdjacentHTML('afterbegin', '<div class="iswg-name">' + user.full_name + '</div>');
-    }
-
-    if (toBoolean(options.showIcon)) {
-      profileDom.insertAdjacentHTML('afterbegin', '<a href="' + instagramURL + options.username + '" target="_blank" rel="noopener"><img class="iswg-icon" src="' + user.profile_pic_url + '"></a>');
-    }
-
-    // 写真追加
-    var imagesDom = document.createElement('div');
-    imagesDom.className = 'iswg-images';
-    baseDom.appendChild(imagesDom);
-
-    for (var i in images) {
-      var itemDom = document.createElement('div');
-      itemDom.className = 'iswg-images-item';
-
-      var linkDom = document.createElement('a');
-      linkDom.className = 'iswg-image-link';
-      linkDom.href = instagramURL + 'p/' + images[i].shortcode;
-      linkDom.target = '_blank';
-      linkDom.rel = 'noopener';
-
-      var img = document.createElement('img');
-      img.className = 'iswg-image';
-      img.src = images[i].url;
-
-      linkDom.appendChild(img);
-      itemDom.appendChild(linkDom);
-      imagesDom.appendChild(itemDom);
-    }
-
-    // コピーライト追加
-    var copyrightWrapperDom = document.createElement('div');
-    copyrightWrapperDom.className = 'iswg-copyright-wrapper';
-    var copyrightDom = document.createElement('a');
-    copyrightDom.className = 'iswg-copyright';
-    copyrightDom.textContent = '©';
-    copyrightDom.title = '無料インスタグラムブログパーツ InstaWindow';
-    copyrightDom.href = 'https://insta-window-tool.web.app/';
-    copyrightDom.target = '_blank';
-    copyrightWrapperDom.appendChild(copyrightDom);
-    baseDom.appendChild(copyrightWrapperDom);
-  }
-
-  function renderStyle() {
-    var style = {
-      base: {
-        background: '#fff',
-        border: '1px solid #ccc',
-        'border-radius': '5px',
-        'box-sizing': 'border-box',
-        padding: '10px',
-        width: Number(options.wrapperWidth) > 10 ? options.wrapperWidth + 'px' : '100%'
-      },
-      profile: {
-        'text-align': 'center'
-      },
-      name: {
-        'font-size': '20px',
-        'font-weight': 'bold',
-        margin: '20px 0 10px'
-      },
-      biography: {
-        'font-size': '12px',
-        margin: '0 0 10px'
-      },
-      'follow-btn': {
-        color: '#fff',
-        'background-color': '#3897f0',
-        'border-radius': '4px',
-        display: 'inline-block',
-        'font-size': '14px',
-        'line-height': '24px',
-        margin: '0 0 10px',
-        padding: '6px 12px',
-        'text-align': 'center',
-        'text-decoration': 'none',
-        'white-space': 'nowrap'
-      },
-      'follow-btn-before': {
-        background: 'url(https://insta-window-tool.web.app/ig_icon.png) center no-repeat',
-        'background-size': 'contain',
-        content: '',
-        display: 'inline-block',
-        height: '20px',
-        margin: '-3px 5px 0 0',
-        width: '20px',
-        'vertical-align': 'middle'
-      },
-      images: {
-        display: 'flex',
-        'flex-wrap': 'wrap'
-      },
-      'images-item': {
-        'box-sizing': 'border-box',
-        padding: '3px',
-        width: '33.33%'
-      },
-      'image-link': {
-        'text-decoration': 'none'
-      },
-      image: {
-        width: '100%'
-      },
-      icon: {
-        border: '1px solid #dbdbdb',
-        'border-radius': '50%',
-        width: '33%'
-      },
-      'copyright-wrapper': {
-        'font-size': '8px',
-        'line-height': 1,
-        'text-align': 'right',
-        'padding-right': '5px'
-      },
-      copyright: {
-        color: '#ccc',
-        'font-size': '8px',
-        'text-decoration': 'none'
-      }
-    };
-
-    Object.keys(style).forEach(function (key) {
-      var elements = document.querySelectorAll('.iswg-' + key);
-
-      if (elements.length === 0) return;
-
-      elements.forEach(function (element, index) {
-        element.setAttribute('style', styleJsonToStyleString(style[key]));
-      });
-    });
-  }
-
-  // style用jsonを文字列に変換
-  function styleJsonToStyleString(jsonString) {
-    return JSON.stringify(jsonString).slice(1, -1).replace(/,/g, ';').replace(/"/g, '');
-  }
-
-  // datasetからboolean取得すると文字列になるので変換
-  function toBoolean(booleanStr) {
-    // もともとbool値の場合はそのまま返す
-    if (typeof booleanStr === 'boolean') return booleanStr;
-
-    return booleanStr.toLowerCase() === 'true';
-  }
-};
-
-instaWindow();
+/******/ });

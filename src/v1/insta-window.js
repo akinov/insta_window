@@ -254,13 +254,14 @@ window.instaWindow = function() {
     };
 
     Object.keys(style).forEach(function(key) {
-      var elements = document.querySelectorAll('.iswg-' + key);
+      let elements = document.querySelectorAll('.iswg-' + key);
+      const length = elements.length;
 
-      if (elements.length === 0) return;
+      if (length === 0) return;
 
-      elements.forEach(function(element, index) {
-        element.setAttribute('style', styleJsonToStyleString(style[key]));
-      });
+      for (var i = 0; i < length; i++) {
+        elements[i].setAttribute('style', styleJsonToStyleString(style[key]));
+      }
     });
   }
 
