@@ -17,6 +17,7 @@
   },
   "scripts": {
     "build": "webpack",
+    "serve": "firebase serve --only hosting",
     "hosting": "firebase deploy --only hosting",
     "deploy": "npm run build & npm run hosting"
   },
