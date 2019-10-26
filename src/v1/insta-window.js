@@ -162,7 +162,7 @@ window.instaWindow = function() {
     var copyrightWrapperDom = document.createElement('div');
     copyrightWrapperDom.className = 'iswg-copyright-wrapper';
     var copyrightDom = document.createElement('a');
-    copyrightDom.className = 'iswg-copyright';
+    copyrightDom.className = 'iswg-copy';
     copyrightDom.textContent = '©';
     copyrightDom.title = '無料インスタグラムブログパーツ InstaWindow';
     copyrightDom.href = 'https://insta-window-tool.web.app/';
@@ -230,6 +230,8 @@ window.instaWindow = function() {
         width: '33.33%'
       },
       'image-link': {
+        margin: 0,
+        padding: 0,
         'text-decoration': 'none'
       },
       image: {
@@ -246,9 +248,12 @@ window.instaWindow = function() {
         'text-align': 'right',
         'padding-right': '5px'
       },
-      copyright: {
+      copy: {
         color: '#ccc',
+        display: 'inline',
         'font-size': '8px',
+        margin: 0,
+        padding: 0,
         'text-decoration': 'none'
       }
     };
