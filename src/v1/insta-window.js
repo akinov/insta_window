@@ -168,6 +168,16 @@ window.instaWindow = function() {
     copyrightDom.href = 'https://insta-window-tool.web.app/';
     copyrightDom.target = '_blank';
     copyrightWrapperDom.appendChild(copyrightDom);
+    // トラッキング用img追加
+    const hostname = location.hostname;
+    if (hostname != 'localhost' && hostname != 'insta-window-tool.web.app') {
+      let gaImgDom = document.createElement('img');
+      gaImgDom.className = 'iswg-tracking-img';
+      const TID = 'UA-142501014-2';
+      const url = `//www.google-analytics.com/collect?v=1&tid=${TID}&cid=1&t=event&ec=views&ea=${hostname}&el=${location.href}`;
+      gaImgDom.src = url;
+      copyrightWrapperDom.appendChild(gaImgDom);
+    }
     baseDom.appendChild(copyrightWrapperDom);
   }
 
@@ -255,6 +265,11 @@ window.instaWindow = function() {
         margin: 0,
         padding: 0,
         'text-decoration': 'none'
+      },
+      'tracking-img': {
+        height: 0,
+        opacity: 0,
+        width: 0
       }
     };
 
