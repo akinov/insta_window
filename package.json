@@ -4,16 +4,21 @@
   "description": "Create Instagram widget",
   "main": "index.js",
   "dependencies": {
-    "firebase-tools": "^7.2.1"
+    "core-js": "^3.3.3",
+    "firebase-tools": "^7.2.1",
+    "@babel/polyfill": "^7.6.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-loader": "^8.0.0",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/babel ./src --out-dir ./public",
-    "deploy": "npm run build & firebase deploy --only hosting"
+    "build": "webpack",
+    "hosting": "firebase deploy --only hosting",
+    "deploy": "npm run build & npm run hosting"
   },
   "repository": {
     "type": "git",
