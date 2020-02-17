@@ -221,7 +221,7 @@ window.instaWindow = function() {
       },
       'follow-btn-before': {
         background:
-          'url(https://insta-window-tool.web.app/ig_icon.png) center no-repeat',
+          'url(https://cdn.jsdelivr.net/gh/akinov/insta_window@v1.0/dist/ig_icon.png) center no-repeat',
         'background-size': 'contain',
         content: '',
         display: 'inline-block',
