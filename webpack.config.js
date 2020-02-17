@@ -3,16 +3,6 @@ module.exports = {
   // モード値を production に設定すると最適化された状態で、
   // development に設定するとソースマップ有効でJSファイルが出力される
   mode: 'development',
-
-  // メインとなるJavaScriptファイル（エントリーポイント）
-  entry: {
-    'v1/insta-window': './src/v1/insta-window.js'
-  },
-  output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: '[name].js'
-  },
-
   module: {
     rules: [
       {
