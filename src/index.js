@@ -54,14 +54,23 @@ window.instaWindow = function() {
       username: 'watanabenaomi703', // 取得対象のユーザー名
       total: 9, // 表示する画像数
       column: 3, 
+      borderColor: '#ccc',
       width: 300,
+      // プロフィール関係
+      showUsername: true,
+      usernameColor: '#666',
+      usernameSize: '20px',
       icon: true,
       bio: true,
+      bioAlign: 'center',
+      bioColor: '#666',
+      usernameSize: '12px',
+      // フォローボタン関係
       follow: true,
+      followColor: '#fff',
+      followBgColor: '#3897f0',
       followIcon: true,
-      followText: 'フォロー',
-      showUsername: true,
-      borderColor: '#ccc'
+      followText: 'フォロー'
     },
     baseDom.dataset
   );
@@ -104,7 +113,7 @@ window.instaWindow = function() {
             </a>`;
   }
   function bioDom() {
-    return `<div class="iswd-biography">${user.biography}'</div>`;
+    return `<div class="iswd-bio">${user.biography}'</div>`;
   }
   function usernameDom() {
     return `<div class="iswd-name">${user.full_name}</div>`;
@@ -214,17 +223,20 @@ window.instaWindow = function() {
         'text-align': 'center'
       },
       name: {
-        'font-size': '20px',
+        color: options.usernameColor,
+        'font-size': options.usernameSize,
         'font-weight': 'bold',
         margin: '20px 0 10px'
       },
-      biography: {
-        'font-size': '12px',
-        margin: '0 0 10px'
+      bio: {
+        color: options.bioColor,
+        'font-size': options.bioSize,
+        margin: '0 0 10px',
+        'text-align': options.bioAlign
       },
       'follow-btn': {
-        color: '#fff',
-        'background-color': '#3897f0',
+        color: options.followColor,
+        'background-color': options.followBgColor,
         'border-radius': '4px',
         display: 'inline-block',
         'font-size': '14px',
