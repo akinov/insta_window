@@ -82,7 +82,7 @@ window.instaWindow = function() {
           });
         }
         clearDom();
-        renderDom();
+        render();
         renderStyle();
       }
     }
@@ -95,53 +95,21 @@ window.instaWindow = function() {
     baseDom.innerHTML = '';
   }
 
-  function renderDom() {
-    // プロフィール追加
-    var profileDom = document.createElement('div');
-    profileDom.className = 'iswd-profile';
-    baseDom.appendChild(profileDom);
-
-    if (toBoolean(options.follow)) {
-      profileDom.insertAdjacentHTML(
-        'afterbegin',
-        '<a class="iswd-follow-btn" href="' +
-          instagramURL +
-          options.username +
-          '" target="_blank" rel="noopener"><span class="iswd-follow-btn-before"></span>フォロー</a>'
-      );
-    }
-
-    if (toBoolean(options.bio)) {
-      profileDom.insertAdjacentHTML(
-        'afterbegin',
-        '<div class="iswd-biography">' + user.biography + '</div>'
-      );
-    }
-
-    if (toBoolean(options.showUsername)) {
-      profileDom.insertAdjacentHTML(
-        'afterbegin',
-        '<div class="iswd-name">' + user.full_name + '</div>'
-      );
-    }
-
-    if (toBoolean(options.icon)) {
-      profileDom.insertAdjacentHTML(
-        'afterbegin',
-        '<a href="' +
-          instagramURL +
-          options.username +
-          '" target="_blank" rel="noopener"><img class="iswd-icon" src="' +
-          user.profile_pic_url +
-          '"></a>'
-      );
-    }
-
-    // 写真追加
+  function followDom() {
+    return `<a class="iswd-follow-btn" href="${instagramURL}${options.username}" target="_blank" rel="noopener"><span class="iswd-follow-btn-before"></span>フォロー</a>`;
+  }
+  function bioDom() {
+    return `<div class="iswd-biography">${user.biography}'</div>`;
+  }
+  function usernameDom() {
+    return `<div class="iswd-name">${user.full_name}</div>`;
+  }
+  function iconDom() {
+    return `<a href="${instagramURL}${options.username}" target="_blank" rel="noopener"><img class="iswd-icon" src="${user.profile_pic_url}"></a>`;
+  }
+  function imagesDom() {
     var imagesDom = document.createElement('div');
     imagesDom.className = 'iswd-images';
-    baseDom.appendChild(imagesDom);
-
     for (const i in images) {
       var itemDom = document.createElement('div');
       itemDom.className = 'iswd-images-item';
@@ -160,8 +128,9 @@ window.instaWindow = function() {
       itemDom.appendChild(linkDom);
       imagesDom.appendChild(itemDom);
     }
-
-    // コピーライト追加
+    return imagesDom;
+  }
+  function copyrightDom() {
     var copyrightWrapperDom = document.createElement('div');
     copyrightWrapperDom.className = 'iswd-copyright-wrapper';
     var copyrightDom = document.createElement('a');
@@ -181,7 +150,46 @@ window.instaWindow = function() {
       gaImgDom.src = url;
       copyrightWrapperDom.appendChild(gaImgDom);
     }
-    baseDom.appendChild(copyrightWrapperDom);
+    return copyrightWrapperDom;
+  }
+
+  function render() {
+    // プロフィール追加
+    var profileDom = document.createElement('div');
+    profileDom.className = 'iswd-profile';
+    baseDom.appendChild(profileDom);
+
+    if (toBoolean(options.follow)) {
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        followDom()
+      );
+    }
+
+    if (toBoolean(options.bio)) {
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        bioDom()
+      );
+    }
+
+    if (toBoolean(options.showUsername)) {
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        usernameDom()
+      );
+    }
+
+    if (toBoolean(options.icon)) {
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        iconDom()
+      );
+    }
+    // 写真追加
+    baseDom.appendChild(imagesDom());
+    // コピーライト追加
+    baseDom.appendChild(copyrightDom());
   }
 
   function renderStyle() {
