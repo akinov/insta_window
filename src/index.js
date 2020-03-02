@@ -107,19 +107,35 @@ window.instaWindow = function() {
   }
 
   function followDom() {
-    return `<a class="iswd-follow-btn" href="${instagramURL}${options.username}" target="_blank" rel="noopener">
-             ${options.followIcon ? '<span class="iswd-follow-btn-before"></span>' : ''}
-             ${options.followText}
-            </a>`;
+    if (toBoolean(options.follow)) {
+      return `<a class="iswd-follow-btn" href="${instagramURL}${options.username}" target="_blank" rel="noopener">
+              ${options.followIcon ? '<span class="iswd-follow-btn-before"></span>' : ''}
+              ${options.followText}
+              </a>`;
+    } else {
+      return '';
+    }
   }
   function bioDom() {
-    return `<div class="iswd-bio">${user.biography}'</div>`;
+    if (toBoolean(options.bio)) {
+      return `<div class="iswd-bio">${user.biography}'</div>`;
+    } else {
+      return '';
+    }
   }
   function usernameDom() {
-    return `<div class="iswd-name">${user.full_name}</div>`;
+    if (toBoolean(options.showUsername)) {
+      return `<div class="iswd-name">${user.full_name}</div>`;
+    } else {
+      return '';
+    }
   }
   function iconDom() {
-    return `<a href="${instagramURL}${options.username}" target="_blank" rel="noopener"><img class="iswd-icon" src="${user.profile_pic_url}"></a>`;
+    if (toBoolean(options.icon)) {
+      return `<a href="${instagramURL}${options.username}" target="_blank" rel="noopener"><img class="iswd-icon" src="${user.profile_pic_url}"></a>`;
+    } else {
+      return '';
+    }
   }
   function imagesDom() {
     var imagesDom = document.createElement('div');
@@ -173,33 +189,24 @@ window.instaWindow = function() {
     profileDom.className = 'iswd-profile';
     baseDom.appendChild(profileDom);
 
-    if (toBoolean(options.follow)) {
-      profileDom.insertAdjacentHTML(
-        'afterbegin',
-        followDom()
-      );
-    }
+    profileDom.insertAdjacentHTML(
+      'afterbegin',
+      followDom()
+    );
 
-    if (toBoolean(options.bio)) {
-      profileDom.insertAdjacentHTML(
-        'afterbegin',
-        bioDom()
-      );
-    }
+    profileDom.insertAdjacentHTML(
+      'afterbegin',
+      bioDom()
+    );
+    profileDom.insertAdjacentHTML(
+      'afterbegin',
+      usernameDom()
+    );
 
-    if (toBoolean(options.showUsername)) {
-      profileDom.insertAdjacentHTML(
-        'afterbegin',
-        usernameDom()
-      );
-    }
-
-    if (toBoolean(options.icon)) {
-      profileDom.insertAdjacentHTML(
-        'afterbegin',
-        iconDom()
-      );
-    }
+    profileDom.insertAdjacentHTML(
+      'afterbegin',
+      iconDom()
+    );
     // 写真追加
     baseDom.appendChild(imagesDom());
     // コピーライト追加
