@@ -189,24 +189,13 @@ window.instaWindow = function() {
     profileDom.className = 'iswd-profile';
     baseDom.appendChild(profileDom);
 
-    profileDom.insertAdjacentHTML(
-      'afterbegin',
-      followDom()
-    );
-
-    profileDom.insertAdjacentHTML(
-      'afterbegin',
-      bioDom()
-    );
-    profileDom.insertAdjacentHTML(
-      'afterbegin',
-      usernameDom()
-    );
-
-    profileDom.insertAdjacentHTML(
-      'afterbegin',
-      iconDom()
-    );
+    var doms = [followDom(), bioDom(), usernameDom(), iconDom()]
+    for (const i in doms) {
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        doms[i]
+      );
+    }
     // 写真追加
     baseDom.appendChild(imagesDom());
     // コピーライト追加
