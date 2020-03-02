@@ -58,6 +58,8 @@ window.instaWindow = function() {
       icon: true,
       bio: true,
       follow: true,
+      followIcon: true,
+      followText: 'フォロー',
       showUsername: true,
       borderColor: '#ccc'
     },
@@ -96,7 +98,10 @@ window.instaWindow = function() {
   }
 
   function followDom() {
-    return `<a class="iswd-follow-btn" href="${instagramURL}${options.username}" target="_blank" rel="noopener"><span class="iswd-follow-btn-before"></span>フォロー</a>`;
+    return `<a class="iswd-follow-btn" href="${instagramURL}${options.username}" target="_blank" rel="noopener">
+             ${options.followIcon ? '<span class="iswd-follow-btn-before"></span>' : ''}
+             ${options.followText}
+            </a>`;
   }
   function bioDom() {
     return `<div class="iswd-biography">${user.biography}'</div>`;
@@ -248,7 +253,7 @@ window.instaWindow = function() {
       'images-item': {
         'box-sizing': 'border-box',
         padding: '3px',
-        width: '33.33%'
+        width: `${100 / column}%`
       },
       'image-link': {
         margin: 0,
