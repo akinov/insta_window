@@ -42,13 +42,13 @@ if (typeof Object.assign != 'function') {
 }
 
 window.instaWindow = function() {
-  var instagramURL = 'https://www.instagram.com/';
-  var req = new XMLHttpRequest();
-  var baseDom = document.getElementById('insta-window');
-  var images = [];
-  var user;
+  const instagramURL = 'https://www.instagram.com/';
+  const req = new XMLHttpRequest();
+  const baseDom = document.getElementById('insta-window');
+  let images = [];
+  let user;
 
-  var options = Object.assign(
+  const options = Object.assign(
     {
       // default options
       username: 'watanabenaomi703', // 取得対象のユーザー名
@@ -70,7 +70,9 @@ window.instaWindow = function() {
       followColor: '#fff',
       followBgColor: '#3897f0',
       followIcon: true,
-      followText: 'フォロー'
+      followText: 'フォロー',
+      // 表示順番
+
     },
     baseDom.dataset
   );
@@ -80,10 +82,10 @@ window.instaWindow = function() {
       // 通信の完了時
       if (req.status == 200) {
         // 通信の成功時
-        var json_string = req.response.split('window._sharedData = ')[1];
+        let json_string = req.response.split('window._sharedData = ')[1];
         json_string = json_string.split('};</script>')[0] + '}';
         user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
-        var datas = user.edge_owner_to_timeline_media.edges;
+        const datas = user.edge_owner_to_timeline_media.edges;
         // TODO: totalがdatasの数を上回った場合の処理(最高9個しか動かない)
         for (const i in datas) {
           if (i >= options.total) break;
@@ -138,19 +140,19 @@ window.instaWindow = function() {
     }
   }
   function imagesDom() {
-    var imagesDom = document.createElement('div');
+    const imagesDom = document.createElement('div');
     imagesDom.className = 'iswd-images';
     for (const i in images) {
-      var itemDom = document.createElement('div');
+      const itemDom = document.createElement('div');
       itemDom.className = 'iswd-images-item';
 
-      var linkDom = document.createElement('a');
+      const linkDom = document.createElement('a');
       linkDom.className = 'iswd-image-link';
       linkDom.href = instagramURL + 'p/' + images[i].shortcode;
       linkDom.target = '_blank';
       linkDom.rel = 'noopener';
 
-      var img = document.createElement('img');
+      const img = document.createElement('img');
       img.className = 'iswd-image';
       img.src = images[i].url;
 
@@ -161,9 +163,9 @@ window.instaWindow = function() {
     return imagesDom;
   }
   function copyrightDom() {
-    var copyrightWrapperDom = document.createElement('div');
+    const copyrightWrapperDom = document.createElement('div');
     copyrightWrapperDom.className = 'iswd-copyright-wrapper';
-    var copyrightDom = document.createElement('a');
+    const copyrightDom = document.createElement('a');
     copyrightDom.className = 'iswd-copy';
     copyrightDom.textContent = 'created by InstaWindow';
     copyrightDom.title = '無料インスタグラムブログパーツ InstaWindow';
@@ -185,11 +187,11 @@ window.instaWindow = function() {
 
   function render() {
     // プロフィール追加
-    var profileDom = document.createElement('div');
+    const profileDom = document.createElement('div');
     profileDom.className = 'iswd-profile';
     baseDom.appendChild(profileDom);
 
-    var doms = [followDom(), bioDom(), usernameDom(), iconDom()]
+    const doms = [followDom(), bioDom(), usernameDom(), iconDom()]
     for (const i in doms) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
@@ -203,7 +205,7 @@ window.instaWindow = function() {
   }
 
   function renderStyle() {
-    var style = {
+    const style = {
       base: {
         background: '#fff',
         border: `1px solid ${options.borderColor}`,
@@ -303,7 +305,7 @@ window.instaWindow = function() {
 
       if (length === 0) return;
 
-      for (var i = 0; i < length; i++) {
+      for (const i = 0; i < length; i++) {
         elements[i].setAttribute('style', styleJsonToStyleString(style[key]));
       }
     });
