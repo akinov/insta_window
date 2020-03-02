@@ -51,13 +51,15 @@ window.instaWindow = function() {
   var options = Object.assign(
     {
       // default options
-      username: 'akb48', // 取得対象のユーザー名
-      displayImageCount: 9, // 表示する画像数
-      wrapperWidth: 300,
-      showIcon: true,
-      showBiography: true,
-      showFollowBtn: true,
-      showUsername: true
+      username: 'watanabenaomi703', // 取得対象のユーザー名
+      total: 9, // 表示する画像数
+      column: 3, 
+      width: 300,
+      icon: true,
+      bio: true,
+      follow: true,
+      showUsername: true,
+      borderColor: '#ccc'
     },
     baseDom.dataset
   );
@@ -71,8 +73,9 @@ window.instaWindow = function() {
         json_string = json_string.split('};</script>')[0] + '}';
         user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
         var datas = user.edge_owner_to_timeline_media.edges;
+        // TODO: totalがdatasの数を上回った場合の処理(最高9個しか動かない)
         for (const i in datas) {
-          if (i >= options.displayImageCount) break;
+          if (i >= options.total) break;
           images.push({
             shortcode: datas[i].node.shortcode,
             url: datas[i].node.thumbnail_src
@@ -98,7 +101,7 @@ window.instaWindow = function() {
     profileDom.className = 'iswd-profile';
     baseDom.appendChild(profileDom);
 
-    if (toBoolean(options.showFollowBtn)) {
+    if (toBoolean(options.follow)) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
         '<a class="iswd-follow-btn" href="' +
@@ -108,7 +111,7 @@ window.instaWindow = function() {
       );
     }
 
-    if (toBoolean(options.showBiography)) {
+    if (toBoolean(options.bio)) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
         '<div class="iswd-biography">' + user.biography + '</div>'
@@ -122,7 +125,7 @@ window.instaWindow = function() {
       );
     }
 
-    if (toBoolean(options.showIcon)) {
+    if (toBoolean(options.icon)) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
         '<a href="' +
@@ -185,13 +188,13 @@ window.instaWindow = function() {
     var style = {
       base: {
         background: '#fff',
-        border: '1px solid #ccc',
+        border: `1px solid ${options.borderColor}`,
         'border-radius': '5px',
         'box-sizing': 'border-box',
         padding: '10px',
         width:
-          Number(options.wrapperWidth) > 10
-            ? `${options.wrapperWidth}px`
+          Number(options.width) > 10
+            ? `${options.width}px`
             : '100%'
       },
       profile: {
