@@ -114,49 +114,49 @@ window.instaWindow = () => {
     }
   }
   const imagesDom = () => {
-    const imagesDom = document.createElement('div');
-    imagesDom.className = 'iswd-images';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'iswd-images';
     for (const i in images) {
-      const itemDom = document.createElement('div');
-      itemDom.className = 'iswd-images-item';
+      const item = document.createElement('div');
+      item.className = 'iswd-images-item';
 
-      const linkDom = document.createElement('a');
-      linkDom.className = 'iswd-image-link';
-      linkDom.href = instagramURL + 'p/' + images[i].shortcode;
-      linkDom.target = '_blank';
-      linkDom.rel = 'noopener';
+      const link = document.createElement('a');
+      link.className = 'iswd-image-link';
+      link.href = instagramURL + 'p/' + images[i].shortcode;
+      link.target = '_blank';
+      link.rel = 'noopener';
 
       const img = document.createElement('img');
       img.className = 'iswd-image';
       img.src = images[i].url;
 
-      linkDom.appendChild(img);
-      itemDom.appendChild(linkDom);
-      imagesDom.appendChild(itemDom);
+      link.appendChild(img);
+      item.appendChild(link);
+      wrapper.appendChild(item);
     }
-    return imagesDom;
+    return wrapper;
   }
   const copyrightDom = () => {
-    const copyrightWrapperDom = document.createElement('div');
-    copyrightWrapperDom.className = 'iswd-copyright-wrapper';
-    const copyrightDom = document.createElement('a');
-    copyrightDom.className = 'iswd-copy';
-    copyrightDom.textContent = 'created by InstaWindow';
-    copyrightDom.title = '無料インスタグラムブログパーツ InstaWindow';
-    copyrightDom.href = 'https://insta-window-tool.web.app/';
-    copyrightDom.target = '_blank';
-    copyrightWrapperDom.appendChild(copyrightDom);
+    const wrapper = document.createElement('div');
+    wrapper.className = 'iswd-copyright-wrapper';
+    const link = document.createElement('a');
+    link.className = 'iswd-copy';
+    link.textContent = 'created by InstaWindow';
+    link.title = '無料インスタグラムブログパーツ InstaWindow';
+    link.href = 'https://insta-window-tool.web.app/';
+    link.target = '_blank';
+    wrapper.appendChild(link);
     // トラッキング用img追加
     const hostname = location.hostname;
     if (hostname != 'localhost' && hostname != 'insta-window-tool.web.app') {
-      let gaImgDom = document.createElement('img');
-      gaImgDom.className = 'iswd-tracking-img';
+      let gaImg = document.createElement('img');
+      gaImg.className = 'iswd-tracking-img';
       const TID = 'UA-142501014-2';
       const url = `//www.google-analytics.com/collect?v=1&tid=${TID}&cid=1&t=event&ec=views&ea=${hostname}&el=${location.href}`;
-      gaImgDom.src = url;
-      copyrightWrapperDom.appendChild(gaImgDom);
+      gaImg.src = url;
+      wrapper.appendChild(gaImg);
     }
-    return copyrightWrapperDom;
+    return wrapper;
   }
 
   const render = () => {
