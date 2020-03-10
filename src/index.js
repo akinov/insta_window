@@ -57,16 +57,12 @@ window.instaWindow = () => {
       borderColor: '#ccc',
       width: 300,
       // プロフィール関係
-      showUsername: true,
       usernameColor: '#666',
       usernameSize: '20px',
-      icon: true,
-      bio: true,
       bioAlign: 'center',
       bioColor: '#666',
       usernameSize: '12px',
       // フォローボタン関係
-      follow: true,
       followColor: '#fff',
       followBgColor: '#3897f0',
       followIcon: true,
@@ -83,35 +79,19 @@ window.instaWindow = () => {
   }
 
   const followDom = () => {
-    if (toBoolean(options.follow)) {
-      return `<a class="iswd-follow-btn" href="${instagramURL}${options.username}" target="_blank" rel="noopener">
-              ${options.followIcon ? '<span class="iswd-follow-btn-before"></span>' : ''}
-              ${options.followText}
-              </a>`;
-    } else {
-      return '';
-    }
+    return `<a class="iswd-follow-btn" href="${instagramURL}${options.username}" target="_blank" rel="noopener">
+            ${options.followIcon ? '<span class="iswd-follow-btn-before"></span>' : ''}
+            ${options.followText}
+            </a>`;
   }
   const bioDom = () => {
-    if (toBoolean(options.bio)) {
-      return `<div class="iswd-bio">${user.biography}'</div>`;
-    } else {
-      return '';
-    }
+    return `<div class="iswd-bio">${user.biography}'</div>`;
   }
   const usernameDom = () => {
-    if (toBoolean(options.showUsername)) {
-      return `<div class="iswd-name">${user.full_name}</div>`;
-    } else {
-      return '';
-    }
+    return `<div class="iswd-name">${user.full_name}</div>`;
   }
   const iconDom = () => {
-    if (toBoolean(options.icon)) {
-      return `<a href="${instagramURL}${options.username}" target="_blank" rel="noopener"><img class="iswd-icon" src="${user.profile_pic_url}"></a>`;
-    } else {
-      return '';
-    }
+    return `<a href="${instagramURL}${options.username}" target="_blank" rel="noopener"><img class="iswd-icon" src="${user.profile_pic_url}"></a>`;
   }
   const imagesDom = () => {
     const wrapper = document.createElement('div');
