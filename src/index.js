@@ -72,6 +72,7 @@ window.instaWindow = () => {
       followIcon: true,
       followText: 'フォロー',
       // 表示順番
+      order: 'icon,name,bio,btn'
 
     },
     baseDom.dataset
@@ -164,13 +165,16 @@ window.instaWindow = () => {
     profileDom.className = 'iswd-profile';
     baseDom.appendChild(profileDom);
 
-    const doms = [followDom(), bioDom(), usernameDom(), iconDom()]
-    for (const i in doms) {
-      profileDom.insertAdjacentHTML(
-        'afterbegin',
-        doms[i]
-      );
+    const doms = {
+      icon: iconDom(),
+      name: usernameDom(),
+      bio: bioDom(),
+      btn: followDom()
     }
+    const orders = options.order.split(',');
+    orders.forEach((domName) => { 
+      profileDom.appendChild(doms[domName]);
+    })
     // 写真追加
     baseDom.appendChild(imagesDom());
     // コピーライト追加
