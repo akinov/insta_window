@@ -41,7 +41,7 @@ if (typeof Object.assign != 'function') {
   });
 }
 
-window.instaWindow = function() {
+window.instaWindow = () => {
   const instagramURL = 'https://www.instagram.com/';
   const req = new XMLHttpRequest();
   const baseDom = document.getElementById('insta-window');
@@ -77,38 +77,11 @@ window.instaWindow = function() {
     baseDom.dataset
   );
 
-  req.onreadystatechange = function() {
-    if (req.readyState == 4) {
-      // 通信の完了時
-      if (req.status == 200) {
-        // 通信の成功時
-        let json_string = req.response.split('window._sharedData = ')[1];
-        json_string = json_string.split('};</script>')[0] + '}';
-        user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
-        const datas = user.edge_owner_to_timeline_media.edges;
-        // TODO: totalがdatasの数を上回った場合の処理(最高9個しか動かない)
-        for (const i in datas) {
-          if (i >= options.total) break;
-          images.push({
-            shortcode: datas[i].node.shortcode,
-            url: datas[i].node.thumbnail_src
-          });
-        }
-        clearDom();
-        render();
-        renderStyle();
-      }
-    }
-  };
-
-  req.open('GET', instagramURL + options.username, true);
-  req.send(null);
-
-  function clearDom() {
+  const clearDom = () => {
     baseDom.innerHTML = '';
   }
 
-  function followDom() {
+  const followDom = () => {
     if (toBoolean(options.follow)) {
       return `<a class="iswd-follow-btn" href="${instagramURL}${options.username}" target="_blank" rel="noopener">
               ${options.followIcon ? '<span class="iswd-follow-btn-before"></span>' : ''}
@@ -118,28 +91,28 @@ window.instaWindow = function() {
       return '';
     }
   }
-  function bioDom() {
+  const bioDom = () => {
     if (toBoolean(options.bio)) {
       return `<div class="iswd-bio">${user.biography}'</div>`;
     } else {
       return '';
     }
   }
-  function usernameDom() {
+  const usernameDom = () => {
     if (toBoolean(options.showUsername)) {
       return `<div class="iswd-name">${user.full_name}</div>`;
     } else {
       return '';
     }
   }
-  function iconDom() {
+  const iconDom = () => {
     if (toBoolean(options.icon)) {
       return `<a href="${instagramURL}${options.username}" target="_blank" rel="noopener"><img class="iswd-icon" src="${user.profile_pic_url}"></a>`;
     } else {
       return '';
     }
   }
-  function imagesDom() {
+  const imagesDom = () => {
     const imagesDom = document.createElement('div');
     imagesDom.className = 'iswd-images';
     for (const i in images) {
@@ -162,7 +135,7 @@ window.instaWindow = function() {
     }
     return imagesDom;
   }
-  function copyrightDom() {
+  const copyrightDom = () => {
     const copyrightWrapperDom = document.createElement('div');
     copyrightWrapperDom.className = 'iswd-copyright-wrapper';
     const copyrightDom = document.createElement('a');
@@ -185,7 +158,7 @@ window.instaWindow = function() {
     return copyrightWrapperDom;
   }
 
-  function render() {
+  const render = () => {
     // プロフィール追加
     const profileDom = document.createElement('div');
     profileDom.className = 'iswd-profile';
@@ -204,7 +177,7 @@ window.instaWindow = function() {
     baseDom.appendChild(copyrightDom());
   }
 
-  function renderStyle() {
+  const renderStyle = () => {
     const style = {
       base: {
         background: '#fff',
@@ -299,7 +272,7 @@ window.instaWindow = function() {
       }
     };
 
-    Object.keys(style).forEach(function(key) {
+    Object.keys(style).forEach((key) => {
       let elements = document.querySelectorAll('.iswd-' + key);
       const length = elements.length;
 
@@ -312,7 +285,7 @@ window.instaWindow = function() {
   }
 
   // style用jsonを文字列に変換
-  function styleJsonToStyleString(jsonString) {
+  const styleJsonToStyleString = (jsonString) => {
     return JSON.stringify(jsonString)
       .slice(1, -1)
       .replace(/,/g, ';')
@@ -320,12 +293,39 @@ window.instaWindow = function() {
   }
 
   // datasetからboolean取得すると文字列になるので変換
-  function toBoolean(booleanStr) {
+  const toBoolean = (booleanStr) => {
     // もともとbool値の場合はそのまま返す
     if (typeof booleanStr === 'boolean') return booleanStr;
 
     return booleanStr.toLowerCase() === 'true';
   }
+
+  req.onreadystatechange = () => {
+    if (req.readyState == 4) {
+      // 通信の完了時
+      if (req.status == 200) {
+        // 通信の成功時
+        let json_string = req.response.split('window._sharedData = ')[1];
+        json_string = json_string.split('};</script>')[0] + '}';
+        user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
+        const datas = user.edge_owner_to_timeline_media.edges;
+        // TODO: totalがdatasの数を上回った場合の処理(最高9個しか動かない)
+        for (const i in datas) {
+          if (i >= options.total) break;
+          images.push({
+            shortcode: datas[i].node.shortcode,
+            url: datas[i].node.thumbnail_src
+          });
+        }
+        clearDom();
+        render();
+        renderStyle();
+      }
+    }
+  };
+
+  req.open('GET', instagramURL + options.username, true);
+  req.send(null);
 };
 
 instaWindow();
