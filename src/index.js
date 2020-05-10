@@ -37,11 +37,11 @@ if (typeof Object.assign != 'function') {
       return to;
     },
     writable: true,
-    configurable: true
+    configurable: true,
   });
 }
 
-window.instaWindow = function() {
+window.instaWindow = function () {
   var instagramURL = 'https://www.instagram.com/';
   var req = new XMLHttpRequest();
   var baseDom = document.getElementById('insta-widget');
@@ -57,12 +57,12 @@ window.instaWindow = function() {
       showIcon: true,
       showBiography: true,
       showFollowBtn: true,
-      showUsername: true
+      showUsername: true,
     },
     baseDom.dataset
   );
 
-  req.onreadystatechange = function() {
+  req.onreadystatechange = function () {
     if (req.readyState == 4) {
       // 通信の完了時
       if (req.status == 200) {
@@ -75,8 +75,13 @@ window.instaWindow = function() {
           if (i >= options.displayImageCount) break;
           images.push({
             shortcode: datas[i].node.shortcode,
-            url: datas[i].node.thumbnail_src
+            url: datas[i].node.thumbnail_src,
           });
+        }
+        if (typeof Storage !== 'undefined') {
+          sessionStorage.setItem('iswd_username', options.username);
+          sessionStorage.setItem('iswd_images', JSON.stringify(images));
+          sessionStorage.setItem('iswd_user', JSON.stringify(user));
         }
         clearDom();
         renderDom();
@@ -85,8 +90,31 @@ window.instaWindow = function() {
     }
   };
 
-  req.open('GET', instagramURL + options.username, true);
-  req.send(null);
+  function getHttpRequest() {
+    req.open('GET', instagramURL + options.username, true);
+    req.send(null);
+  }
+
+  if (typeof Storage !== 'undefined') {
+    var settionUsername = sessionStorage.getItem('iswd_username');
+    var settionImages = JSON.parse(sessionStorage.getItem('iswd_images'));
+    var settionUser = JSON.parse(sessionStorage.getItem('iswd_user'));
+    if (
+      settionUsername != options.username ||
+      settionImages == null ||
+      settionUser == null
+    ) {
+      getHttpRequest();
+    } else {
+      user = settionUser;
+      images = settionImages;
+      clearDom();
+      renderDom();
+      renderStyle();
+    }
+  } else {
+    getHttpRequest();
+  }
 
   function clearDom() {
     baseDom.innerHTML = '';
@@ -192,19 +220,19 @@ window.instaWindow = function() {
         width:
           Number(options.wrapperWidth) > 10
             ? `${options.wrapperWidth}px`
-            : '100%'
+            : '100%',
       },
       profile: {
-        'text-align': 'center'
+        'text-align': 'center',
       },
       name: {
         'font-size': '20px',
         'font-weight': 'bold',
-        margin: '20px 0 10px'
+        margin: '20px 0 10px',
       },
       biography: {
         'font-size': '12px',
-        margin: '0 0 10px'
+        margin: '0 0 10px',
       },
       'follow-btn': {
         color: '#fff',
@@ -217,7 +245,7 @@ window.instaWindow = function() {
         padding: '6px 12px',
         'text-align': 'center',
         'text-decoration': 'none',
-        'white-space': 'nowrap'
+        'white-space': 'nowrap',
       },
       'follow-btn-before': {
         background:
@@ -228,35 +256,35 @@ window.instaWindow = function() {
         height: '20px',
         margin: '-3px 5px 0 0',
         width: '20px',
-        'vertical-align': 'middle'
+        'vertical-align': 'middle',
       },
       images: {
         display: 'flex',
-        'flex-wrap': 'wrap'
+        'flex-wrap': 'wrap',
       },
       'images-item': {
         'box-sizing': 'border-box',
         padding: '3px',
-        width: '33.33%'
+        width: '33.33%',
       },
       'image-link': {
         margin: 0,
         padding: 0,
-        'text-decoration': 'none'
+        'text-decoration': 'none',
       },
       image: {
-        width: '100%'
+        width: '100%',
       },
       icon: {
         border: '1px solid #dbdbdb',
         'border-radius': '50%',
-        width: '33%'
+        width: '33%',
       },
       'copyright-wrapper': {
         'font-size': '8px',
         'line-height': 1,
         'text-align': 'right',
-        'padding-right': '5px'
+        'padding-right': '5px',
       },
       copy: {
         color: '#ccc',
@@ -264,16 +292,16 @@ window.instaWindow = function() {
         'font-size': '8px',
         margin: 0,
         padding: 0,
-        'text-decoration': 'none'
+        'text-decoration': 'none',
       },
       'tracking-img': {
         height: 0,
         opacity: 0,
-        width: 0
-      }
+        width: 0,
+      },
     };
 
-    Object.keys(style).forEach(function(key) {
+    Object.keys(style).forEach(function (key) {
       let elements = document.querySelectorAll('.iswg-' + key);
       const length = elements.length;
 
