@@ -76,7 +76,6 @@ window.instaWindow = function () {
         user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
         var datas = user.edge_owner_to_timeline_media.edges;
         for (const i in datas) {
-          if (i >= options.displayImageCount) break;
           images.push({
             shortcode: datas[i].node.shortcode,
             url: datas[i].node.thumbnail_src,
@@ -172,6 +171,7 @@ window.instaWindow = function () {
     baseDom.appendChild(imagesDom);
 
     for (const i in images) {
+      if (i >= options.displayImageCount) break;
       var itemDom = document.createElement('div');
       itemDom.className = 'iswg-images-item';
 
