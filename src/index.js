@@ -62,6 +62,10 @@ window.instaWindow = function () {
     baseDom.dataset
   );
 
+  if (typeof options.displayImageCount == 'string') {
+    options.displayImageCount = Number(options.displayImageCount);
+  }
+
   req.onreadystatechange = function () {
     if (req.readyState == 4) {
       // 通信の完了時
