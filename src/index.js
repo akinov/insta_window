@@ -81,7 +81,7 @@ window.instaWindow = function () {
             url: datas[i].node.thumbnail_src,
           });
         }
-        if (typeof Storage !== 'undefined') {
+        if (storageAvailable('sessionStorage')) {
           sessionStorage.setItem('iswd_username', options.username);
           sessionStorage.setItem('iswd_images', JSON.stringify(images));
           sessionStorage.setItem('iswd_user', JSON.stringify(user));
@@ -98,7 +98,7 @@ window.instaWindow = function () {
     req.send(null);
   }
 
-  if (typeof Storage !== 'undefined') {
+  if (storageAvailable('sessionStorage')) {
     var settionUsername = sessionStorage.getItem('iswd_username');
     var settionImages = JSON.parse(sessionStorage.getItem('iswd_images'));
     var settionUser = JSON.parse(sessionStorage.getItem('iswd_user'));
@@ -331,6 +331,33 @@ window.instaWindow = function () {
     if (typeof booleanStr === 'boolean') return booleanStr;
 
     return booleanStr.toLowerCase() === 'true';
+  }
+
+  function storageAvailable(type) {
+    var storage;
+    try {
+      storage = window[type];
+      var x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+    } catch (e) {
+      return (
+        e instanceof DOMException &&
+        // everything except Firefox
+        (e.code === 22 ||
+          // Firefox
+          e.code === 1014 ||
+          // test name field too, because code might not be present
+          // everything except Firefox
+          e.name === 'QuotaExceededError' ||
+          // Firefox
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+        // acknowledge QuotaExceededError only if there's something already stored
+        storage &&
+        storage.length !== 0
+      );
+    }
   }
 };
 
