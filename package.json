@@ -1,6 +1,6 @@
 {
   "name": "insta_window",
-  "version": "1.2.0",
+  "version": "2.2.0",
   "description": "Create Instagram widget",
   "main": "index.js",
   "dependencies": {
