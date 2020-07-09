@@ -126,30 +126,30 @@ window.instaWindow = function () {
   function renderDom() {
     // プロフィール追加
     var profileDom = document.createElement('div');
-    profileDom.className = 'iswg-profile';
+    profileDom.className = 'iswd-profile';
     baseDom.appendChild(profileDom);
 
     if (toBoolean(options.showFollowBtn)) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
-        '<a class="iswg-follow-btn" href="' +
+        '<a class="iswd-follow-btn" href="' +
           instagramURL +
           options.username +
-          '" target="_blank" rel="noopener"><span class="iswg-follow-btn-before"></span>フォロー</a>'
+          '" target="_blank" rel="noopener"><span class="iswd-follow-btn-before"></span>フォロー</a>'
       );
     }
 
     if (toBoolean(options.showBiography)) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
-        '<div class="iswg-biography">' + user.biography + '</div>'
+        '<div class="iswd-biography">' + user.biography + '</div>'
       );
     }
 
     if (toBoolean(options.showUsername)) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
-        '<div class="iswg-name">' + user.full_name + '</div>'
+        '<div class="iswd-name">' + user.full_name + '</div>'
       );
     }
 
@@ -159,7 +159,7 @@ window.instaWindow = function () {
         '<a href="' +
           instagramURL +
           options.username +
-          '" target="_blank" rel="noopener"><img class="iswg-icon" src="' +
+          '" target="_blank" rel="noopener"><img class="iswd-icon" src="' +
           user.profile_pic_url +
           '"></a>'
       );
@@ -167,22 +167,22 @@ window.instaWindow = function () {
 
     // 写真追加
     var imagesDom = document.createElement('div');
-    imagesDom.className = 'iswg-images';
+    imagesDom.className = 'iswd-images';
     baseDom.appendChild(imagesDom);
 
     for (const i in images) {
       if (i >= options.displayImageCount) break;
       var itemDom = document.createElement('div');
-      itemDom.className = 'iswg-images-item';
+      itemDom.className = 'iswd-images-item';
 
       var linkDom = document.createElement('a');
-      linkDom.className = 'iswg-image-link';
+      linkDom.className = 'iswd-image-link';
       linkDom.href = instagramURL + 'p/' + images[i].shortcode;
       linkDom.target = '_blank';
       linkDom.rel = 'noopener';
 
       var img = document.createElement('img');
-      img.className = 'iswg-image';
+      img.className = 'iswd-image';
       img.src = images[i].url;
 
       linkDom.appendChild(img);
@@ -192,9 +192,9 @@ window.instaWindow = function () {
 
     // コピーライト追加
     var copyrightWrapperDom = document.createElement('div');
-    copyrightWrapperDom.className = 'iswg-copyright-wrapper';
+    copyrightWrapperDom.className = 'iswd-copyright-wrapper';
     var copyrightDom = document.createElement('a');
-    copyrightDom.className = 'iswg-copy';
+    copyrightDom.className = 'iswd-copy';
     copyrightDom.textContent = 'created by InstaWindow';
     copyrightDom.title = '無料インスタグラムブログパーツ InstaWindow';
     copyrightDom.href = 'https://insta-window-tool.web.app/';
@@ -204,7 +204,7 @@ window.instaWindow = function () {
     const hostname = location.hostname;
     if (hostname != 'localhost' && hostname != 'insta-window-tool.web.app') {
       let gaImgDom = document.createElement('img');
-      gaImgDom.className = 'iswg-tracking-img';
+      gaImgDom.className = 'iswd-tracking-img';
       const TID = 'UA-142501014-2';
       const url = `//www.google-analytics.com/collect?v=1&tid=${TID}&cid=1&t=event&ec=views&ea=${hostname}&el=${location.href}`;
       gaImgDom.src = url;
@@ -306,7 +306,7 @@ window.instaWindow = function () {
     };
 
     Object.keys(style).forEach(function (key) {
-      let elements = document.querySelectorAll('.iswg-' + key);
+      let elements = document.querySelectorAll('.iswd-' + key);
       const length = elements.length;
 
       if (length === 0) return;
