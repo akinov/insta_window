@@ -291,7 +291,7 @@ window.instaWindow = function () {
         'padding-right': '5px',
       },
       copy: {
-        color: '#ccc',
+        color: '#666',
         display: 'inline',
         'font-size': '8px',
         margin: 0,
