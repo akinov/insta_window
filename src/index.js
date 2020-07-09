@@ -37,161 +37,210 @@ if (typeof Object.assign != 'function') {
       return to;
     },
     writable: true,
-    configurable: true
+    configurable: true,
   });
 }
 
-window.instaWindow = () => {
-  const instagramURL = 'https://www.instagram.com/';
-  const req = new XMLHttpRequest();
-  const baseDom = document.getElementById('insta-window');
-  let images = [];
-  let user;
+window.instaWindow = function () {
+  var instagramURL = 'https://www.instagram.com/';
+  var req = new XMLHttpRequest();
+  var baseDom = document.getElementById('insta-widget');
+  var images = [];
+  var user;
 
-  const options = Object.assign(
+  var options = Object.assign(
     {
       // default options
-      username: 'watanabenaomi703', // 取得対象のユーザー名
-      total: 9, // 表示する画像数
-      column: 3, 
-      borderColor: '#ccc',
-      width: 300,
-      // プロフィール関係
-      usernameColor: '#666',
-      usernameSize: '20px',
-      bioAlign: 'center',
-      bioColor: '#666',
-      usernameSize: '12px',
-      // フォローボタン関係
-      followColor: '#fff',
-      followBgColor: '#3897f0',
-      followIcon: true,
-      followText: 'フォロー',
-      // 表示順番
-      order: 'icon,name,bio,btn'
-
+      username: 'akb48', // 取得対象のユーザー名
+      displayImageCount: 9, // 表示する画像数
+      wrapperWidth: 300,
+      showIcon: true,
+      showBiography: true,
+      showFollowBtn: true,
+      showUsername: true,
     },
     baseDom.dataset
   );
 
-  const clearDom = () => {
+  if (typeof options.displayImageCount == 'string') {
+    options.displayImageCount = Number(options.displayImageCount);
+  }
+
+  req.onreadystatechange = function () {
+    if (req.readyState == 4) {
+      // 通信の完了時
+      if (req.status == 200) {
+        // 通信の成功時
+        var json_string = req.response.split('window._sharedData = ')[1];
+        json_string = json_string.split('};</script>')[0] + '}';
+        user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
+        var datas = user.edge_owner_to_timeline_media.edges;
+        for (const i in datas) {
+          images.push({
+            shortcode: datas[i].node.shortcode,
+            url: datas[i].node.thumbnail_src,
+          });
+        }
+        if (storageAvailable('sessionStorage')) {
+          sessionStorage.setItem('iswd_username', options.username);
+          sessionStorage.setItem('iswd_images', JSON.stringify(images));
+          sessionStorage.setItem('iswd_user', JSON.stringify(user));
+        }
+        clearDom();
+        renderDom();
+        renderStyle();
+      }
+    }
+  };
+
+  function getHttpRequest() {
+    req.open('GET', instagramURL + options.username, true);
+    req.send(null);
+  }
+
+  if (storageAvailable('sessionStorage')) {
+    var settionUsername = sessionStorage.getItem('iswd_username');
+    var settionImages = JSON.parse(sessionStorage.getItem('iswd_images'));
+    var settionUser = JSON.parse(sessionStorage.getItem('iswd_user'));
+    if (
+      settionUsername != options.username ||
+      settionImages == null ||
+      settionUser == null
+    ) {
+      getHttpRequest();
+    } else {
+      user = settionUser;
+      images = settionImages;
+      clearDom();
+      renderDom();
+      renderStyle();
+    }
+  } else {
+    getHttpRequest();
+  }
+
+  function clearDom() {
     baseDom.innerHTML = '';
   }
 
-  const followDom = () => {
-    return `<a class="iswd-follow-btn" href="${instagramURL}${options.username}" target="_blank" rel="noopener">
-            ${options.followIcon ? '<span class="iswd-follow-btn-before"></span>' : ''}
-            ${options.followText}
-            </a>`;
-  }
-  const bioDom = () => {
-    return `<div class="iswd-bio">${user.biography}'</div>`;
-  }
-  const usernameDom = () => {
-    return `<div class="iswd-name">${user.full_name}</div>`;
-  }
-  const iconDom = () => {
-    return `<a href="${instagramURL}${options.username}" target="_blank" rel="noopener"><img class="iswd-icon" src="${user.profile_pic_url}"></a>`;
-  }
-  const imagesDom = () => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'iswd-images';
+  function renderDom() {
+    // プロフィール追加
+    var profileDom = document.createElement('div');
+    profileDom.className = 'iswg-profile';
+    baseDom.appendChild(profileDom);
+
+    if (toBoolean(options.showFollowBtn)) {
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        '<a class="iswg-follow-btn" href="' +
+          instagramURL +
+          options.username +
+          '" target="_blank" rel="noopener"><span class="iswg-follow-btn-before"></span>フォロー</a>'
+      );
+    }
+
+    if (toBoolean(options.showBiography)) {
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        '<div class="iswg-biography">' + user.biography + '</div>'
+      );
+    }
+
+    if (toBoolean(options.showUsername)) {
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        '<div class="iswg-name">' + user.full_name + '</div>'
+      );
+    }
+
+    if (toBoolean(options.showIcon)) {
+      profileDom.insertAdjacentHTML(
+        'afterbegin',
+        '<a href="' +
+          instagramURL +
+          options.username +
+          '" target="_blank" rel="noopener"><img class="iswg-icon" src="' +
+          user.profile_pic_url +
+          '"></a>'
+      );
+    }
+
+    // 写真追加
+    var imagesDom = document.createElement('div');
+    imagesDom.className = 'iswg-images';
+    baseDom.appendChild(imagesDom);
+
     for (const i in images) {
-      const item = document.createElement('div');
-      item.className = 'iswd-images-item';
+      if (i >= options.displayImageCount) break;
+      var itemDom = document.createElement('div');
+      itemDom.className = 'iswg-images-item';
 
-      const link = document.createElement('a');
-      link.className = 'iswd-image-link';
-      link.href = instagramURL + 'p/' + images[i].shortcode;
-      link.target = '_blank';
-      link.rel = 'noopener';
+      var linkDom = document.createElement('a');
+      linkDom.className = 'iswg-image-link';
+      linkDom.href = instagramURL + 'p/' + images[i].shortcode;
+      linkDom.target = '_blank';
+      linkDom.rel = 'noopener';
 
-      const img = document.createElement('img');
-      img.className = 'iswd-image';
+      var img = document.createElement('img');
+      img.className = 'iswg-image';
       img.src = images[i].url;
 
-      link.appendChild(img);
-      item.appendChild(link);
-      wrapper.appendChild(item);
+      linkDom.appendChild(img);
+      itemDom.appendChild(linkDom);
+      imagesDom.appendChild(itemDom);
     }
-    return wrapper;
-  }
-  const copyrightDom = () => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'iswd-copyright-wrapper';
-    const link = document.createElement('a');
-    link.className = 'iswd-copy';
-    link.textContent = 'created by InstaWindow';
-    link.title = '無料インスタグラムブログパーツ InstaWindow';
-    link.href = 'https://insta-window-tool.web.app/';
-    link.target = '_blank';
-    wrapper.appendChild(link);
+
+    // コピーライト追加
+    var copyrightWrapperDom = document.createElement('div');
+    copyrightWrapperDom.className = 'iswg-copyright-wrapper';
+    var copyrightDom = document.createElement('a');
+    copyrightDom.className = 'iswg-copy';
+    copyrightDom.textContent = 'created by InstaWindow';
+    copyrightDom.title = '無料インスタグラムブログパーツ InstaWindow';
+    copyrightDom.href = 'https://insta-window-tool.web.app/';
+    copyrightDom.target = '_blank';
+    copyrightWrapperDom.appendChild(copyrightDom);
     // トラッキング用img追加
     const hostname = location.hostname;
     if (hostname != 'localhost' && hostname != 'insta-window-tool.web.app') {
-      let gaImg = document.createElement('img');
-      gaImg.className = 'iswd-tracking-img';
+      let gaImgDom = document.createElement('img');
+      gaImgDom.className = 'iswg-tracking-img';
       const TID = 'UA-142501014-2';
       const url = `//www.google-analytics.com/collect?v=1&tid=${TID}&cid=1&t=event&ec=views&ea=${hostname}&el=${location.href}`;
-      gaImg.src = url;
-      wrapper.appendChild(gaImg);
+      gaImgDom.src = url;
+      copyrightWrapperDom.appendChild(gaImgDom);
     }
-    return wrapper;
+    baseDom.appendChild(copyrightWrapperDom);
   }
 
-  const render = () => {
-    // プロフィール追加
-    const profileDom = document.createElement('div');
-    profileDom.className = 'iswd-profile';
-    baseDom.appendChild(profileDom);
-
-    const doms = {
-      icon: iconDom(),
-      name: usernameDom(),
-      bio: bioDom(),
-      btn: followDom()
-    }
-    const orders = options.order.split(',');
-    orders.forEach((domName) => { 
-      profileDom.appendChild(doms[domName]);
-    })
-    // 写真追加
-    baseDom.appendChild(imagesDom());
-    // コピーライト追加
-    baseDom.appendChild(copyrightDom());
-  }
-
-  const renderStyle = () => {
-    const style = {
+  function renderStyle() {
+    var style = {
       base: {
         background: '#fff',
-        border: `1px solid ${options.borderColor}`,
+        border: '1px solid #ccc',
         'border-radius': '5px',
         'box-sizing': 'border-box',
         padding: '10px',
         width:
-          Number(options.width) > 10
-            ? `${options.width}px`
-            : '100%'
+          Number(options.wrapperWidth) > 10
+            ? `${options.wrapperWidth}px`
+            : '100%',
       },
       profile: {
-        'text-align': 'center'
+        'text-align': 'center',
       },
       name: {
-        color: options.usernameColor,
-        'font-size': options.usernameSize,
+        'font-size': '20px',
         'font-weight': 'bold',
-        margin: '20px 0 10px'
+        margin: '20px 0 10px',
       },
-      bio: {
-        color: options.bioColor,
-        'font-size': options.bioSize,
+      biography: {
+        'font-size': '12px',
         margin: '0 0 10px',
-        'text-align': options.bioAlign
       },
       'follow-btn': {
-        color: options.followColor,
-        'background-color': options.followBgColor,
+        color: '#fff',
+        'background-color': '#3897f0',
         'border-radius': '4px',
         display: 'inline-block',
         'font-size': '14px',
@@ -200,7 +249,7 @@ window.instaWindow = () => {
         padding: '6px 12px',
         'text-align': 'center',
         'text-decoration': 'none',
-        'white-space': 'nowrap'
+        'white-space': 'nowrap',
       },
       'follow-btn-before': {
         background:
@@ -211,35 +260,35 @@ window.instaWindow = () => {
         height: '20px',
         margin: '-3px 5px 0 0',
         width: '20px',
-        'vertical-align': 'middle'
+        'vertical-align': 'middle',
       },
       images: {
         display: 'flex',
-        'flex-wrap': 'wrap'
+        'flex-wrap': 'wrap',
       },
       'images-item': {
         'box-sizing': 'border-box',
         padding: '3px',
-        width: `${100 / column}%`
+        width: '33.33%',
       },
       'image-link': {
         margin: 0,
         padding: 0,
-        'text-decoration': 'none'
+        'text-decoration': 'none',
       },
       image: {
-        width: '100%'
+        width: '100%',
       },
       icon: {
         border: '1px solid #dbdbdb',
         'border-radius': '50%',
-        width: '33%'
+        width: '33%',
       },
       'copyright-wrapper': {
         'font-size': '8px',
         'line-height': 1,
         'text-align': 'right',
-        'padding-right': '5px'
+        'padding-right': '5px',
       },
       copy: {
         color: '#ccc',
@@ -247,29 +296,29 @@ window.instaWindow = () => {
         'font-size': '8px',
         margin: 0,
         padding: 0,
-        'text-decoration': 'none'
+        'text-decoration': 'none',
       },
       'tracking-img': {
         height: 0,
         opacity: 0,
-        width: 0
-      }
+        width: 0,
+      },
     };
 
-    Object.keys(style).forEach((key) => {
-      let elements = document.querySelectorAll('.iswd-' + key);
+    Object.keys(style).forEach(function (key) {
+      let elements = document.querySelectorAll('.iswg-' + key);
       const length = elements.length;
 
       if (length === 0) return;
 
-      for (const i = 0; i < length; i++) {
+      for (var i = 0; i < length; i++) {
         elements[i].setAttribute('style', styleJsonToStyleString(style[key]));
       }
     });
   }
 
   // style用jsonを文字列に変換
-  const styleJsonToStyleString = (jsonString) => {
+  function styleJsonToStyleString(jsonString) {
     return JSON.stringify(jsonString)
       .slice(1, -1)
       .replace(/,/g, ';')
@@ -277,39 +326,39 @@ window.instaWindow = () => {
   }
 
   // datasetからboolean取得すると文字列になるので変換
-  const toBoolean = (booleanStr) => {
+  function toBoolean(booleanStr) {
     // もともとbool値の場合はそのまま返す
     if (typeof booleanStr === 'boolean') return booleanStr;
 
     return booleanStr.toLowerCase() === 'true';
   }
 
-  req.onreadystatechange = () => {
-    if (req.readyState == 4) {
-      // 通信の完了時
-      if (req.status == 200) {
-        // 通信の成功時
-        let json_string = req.response.split('window._sharedData = ')[1];
-        json_string = json_string.split('};</script>')[0] + '}';
-        user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
-        const datas = user.edge_owner_to_timeline_media.edges;
-        // TODO: totalがdatasの数を上回った場合の処理(最高9個しか動かない)
-        for (const i in datas) {
-          if (i >= options.total) break;
-          images.push({
-            shortcode: datas[i].node.shortcode,
-            url: datas[i].node.thumbnail_src
-          });
-        }
-        clearDom();
-        render();
-        renderStyle();
-      }
+  function storageAvailable(type) {
+    var storage;
+    try {
+      storage = window[type];
+      var x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+    } catch (e) {
+      return (
+        e instanceof DOMException &&
+        // everything except Firefox
+        (e.code === 22 ||
+          // Firefox
+          e.code === 1014 ||
+          // test name field too, because code might not be present
+          // everything except Firefox
+          e.name === 'QuotaExceededError' ||
+          // Firefox
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+        // acknowledge QuotaExceededError only if there's something already stored
+        storage &&
+        storage.length !== 0
+      );
     }
-  };
-
-  req.open('GET', instagramURL + options.username, true);
-  req.send(null);
+  }
 };
 
 instaWindow();
