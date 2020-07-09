@@ -285,15 +285,15 @@ window.instaWindow = function () {
         width: '33%',
       },
       'copyright-wrapper': {
-        'font-size': '8px',
+        'font-size': '10px',
         'line-height': 1,
         'text-align': 'right',
         'padding-right': '5px',
       },
       copy: {
-        color: '#ccc',
+        color: '#666',
         display: 'inline',
-        'font-size': '8px',
+        'font-size': '10px',
         margin: 0,
         padding: 0,
         'text-decoration': 'none',
