@@ -152,7 +152,7 @@ window.instaWindow = (baseDom) => {
     }
     const orders = options.order.split(',');
     orders.forEach((domName) => { 
-      profileDom.appendChild(doms[domName]);
+      profileDom.insertAdjacentHTML('beforeend', doms[domName]);
     })
     // 写真追加
     baseDom.appendChild(imagesDom());
@@ -219,7 +219,7 @@ window.instaWindow = (baseDom) => {
       'images-item': {
         'box-sizing': 'border-box',
         padding: '3px',
-        width: `${100 / column}%`
+        width: `${100 / options.column}%`
       },
       'image-link': {
         margin: 0,
@@ -255,13 +255,14 @@ window.instaWindow = (baseDom) => {
       }
     };
 
+    baseDom.setAttribute('style', styleJsonToStyleString(style.base));
     Object.keys(style).forEach((key) => {
-      let elements = document.querySelectorAll('.iswd-' + key);
+      const elements = baseDom.getElementsByClassName('iswd-' + key);
       const length = elements.length;
 
       if (length === 0) return;
 
-      for (const i = 0; i < length; i++) {
+      for (let i = 0; i < length; i++) {
         elements[i].setAttribute('style', styleJsonToStyleString(style[key]));
       }
     });
