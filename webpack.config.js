@@ -4,9 +4,13 @@ module.exports = {
     pro: './src/pro.js',
     main: './src/index.js'
   },
+  output: {
+    filename: '[name].js',
+    path: __dirname + '/dist'
+  },
   // モード値を production に設定すると最適化された状態で、
   // development に設定するとソースマップ有効でJSファイルが出力される
-  mode: 'development',
+  mode: 'production',
   module: {
     rules: [
       {
