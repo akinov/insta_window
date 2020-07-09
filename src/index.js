@@ -44,7 +44,7 @@ if (typeof Object.assign != 'function') {
 window.instaWindow = function () {
   var instagramURL = 'https://www.instagram.com/';
   var req = new XMLHttpRequest();
-  var baseDom = document.getElementById('insta-widget');
+  var baseDom = document.getElementById('insta-window');
   var images = [];
   var user;
 
