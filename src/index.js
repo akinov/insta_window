@@ -51,7 +51,7 @@ window.instaWindow = function () {
   var options = Object.assign(
     {
       // default options
-      username: 'akb48', // 取得対象のユーザー名
+      username: 'watanabenaomi703', // 取得対象のユーザー名
       displayImageCount: 9, // 表示する画像数
       wrapperWidth: 300,
       showIcon: true,
@@ -59,12 +59,8 @@ window.instaWindow = function () {
       showFollowBtn: true,
       showUsername: true,
     },
-    baseDom.dataset
+    JSON.parse(baseDom.dataset.iswd)
   );
-
-  if (typeof options.displayImageCount == 'string') {
-    options.displayImageCount = Number(options.displayImageCount);
-  }
 
   req.onreadystatechange = function () {
     if (req.readyState == 4) {
@@ -129,7 +125,7 @@ window.instaWindow = function () {
     profileDom.className = 'iswd-profile';
     baseDom.appendChild(profileDom);
 
-    if (toBoolean(options.showFollowBtn)) {
+    if (options.showFollowBtn) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
         '<a class="iswd-follow-btn" href="' +
@@ -139,21 +135,21 @@ window.instaWindow = function () {
       );
     }
 
-    if (toBoolean(options.showBiography)) {
+    if (options.showBiography) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
         '<div class="iswd-biography">' + user.biography + '</div>'
       );
     }
 
-    if (toBoolean(options.showUsername)) {
+    if (options.showUsername) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
         '<div class="iswd-name">' + user.full_name + '</div>'
       );
     }
 
-    if (toBoolean(options.showIcon)) {
+    if (options.showIcon) {
       profileDom.insertAdjacentHTML(
         'afterbegin',
         '<a href="' +
@@ -222,7 +218,7 @@ window.instaWindow = function () {
         'box-sizing': 'border-box',
         padding: '10px',
         width:
-          Number(options.wrapperWidth) > 10
+          options.wrapperWidth > 10
             ? `${options.wrapperWidth}px`
             : '100%',
       },
@@ -323,14 +319,6 @@ window.instaWindow = function () {
       .slice(1, -1)
       .replace(/,/g, ';')
       .replace(/"/g, '');
-  }
-
-  // datasetからboolean取得すると文字列になるので変換
-  function toBoolean(booleanStr) {
-    // もともとbool値の場合はそのまま返す
-    if (typeof booleanStr === 'boolean') return booleanStr;
-
-    return booleanStr.toLowerCase() === 'true';
   }
 
   function storageAvailable(type) {
