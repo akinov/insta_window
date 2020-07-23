@@ -118,6 +118,7 @@ window.instaWindow = (baseDom) => {
   }
   const copyrightDom = () => {
     const wrapper = document.createElement('div');
+    wrapper.className = 'iswd-tracking-wrapper';
     // トラッキング用img追加
     const hostname = location.hostname;
     if (hostname != 'localhost' && hostname != 'insta-window-tool.web.app') {
@@ -231,6 +232,9 @@ window.instaWindow = (baseDom) => {
         border: '1px solid #dbdbdb',
         'border-radius': '50%',
         width: '33%'
+      },
+      'tracking-wrapper': {
+        height: 0
       },
       'tracking-img': {
         height: 0,
