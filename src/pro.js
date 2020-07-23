@@ -60,6 +60,7 @@ window.instaWindow = (baseDom) => {
       usernameSize: '20px',
       bioAlign: 'center',
       bioColor: '#666',
+      bioSize: '12px',
       // フォローボタン関係
       followColor: '#fff',
       followBgColor: '#3897f0',
@@ -84,7 +85,7 @@ window.instaWindow = (baseDom) => {
             </a>`;
   }
   const bioDom = () => {
-    return `<div class="iswd-bio">${user.biography}'</div>`;
+    return `<div class="iswd-bio">${user.biography}</div>`;
   }
   const usernameDom = () => {
     return `<div class="iswd-name">${user.full_name}</div>`;
@@ -117,14 +118,6 @@ window.instaWindow = (baseDom) => {
   }
   const copyrightDom = () => {
     const wrapper = document.createElement('div');
-    wrapper.className = 'iswd-copyright-wrapper';
-    const link = document.createElement('a');
-    link.className = 'iswd-copy';
-    link.textContent = 'created by InstaWindow';
-    link.title = '無料インスタグラムブログパーツ InstaWindow';
-    link.href = 'https://insta-window-tool.web.app/';
-    link.target = '_blank';
-    wrapper.appendChild(link);
     // トラッキング用img追加
     const hostname = location.hostname;
     if (hostname != 'localhost' && hostname != 'insta-window-tool.web.app') {
@@ -231,26 +224,13 @@ window.instaWindow = (baseDom) => {
         'text-decoration': 'none'
       },
       image: {
-        width: '100%'
+        width: '100%',
+        'vertical-align': 'middle',
       },
       icon: {
         border: '1px solid #dbdbdb',
         'border-radius': '50%',
         width: '33%'
-      },
-      'copyright-wrapper': {
-        'font-size': '8px',
-        'line-height': 1,
-        'text-align': 'right',
-        'padding-right': '5px'
-      },
-      copy: {
-        color: '#ccc',
-        display: 'inline',
-        'font-size': '8px',
-        margin: 0,
-        padding: 0,
-        'text-decoration': 'none'
       },
       'tracking-img': {
         height: 0,
