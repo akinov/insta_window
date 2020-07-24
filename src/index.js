@@ -274,6 +274,7 @@ window.instaWindow = function () {
       },
       image: {
         width: '100%',
+        'vertical-align': 'middle',
       },
       icon: {
         border: '1px solid #dbdbdb',
