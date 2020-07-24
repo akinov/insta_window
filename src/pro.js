@@ -60,17 +60,17 @@ window.instaWindow = (baseDom) => {
       usernameSize: '20px',
       bioAlign: 'center',
       bioColor: '#666',
-      usernameSize: '12px',
       // フォローボタン関係
       followColor: '#fff',
       followBgColor: '#3897f0',
       followIcon: true,
       followText: 'フォロー',
       // 表示順番
-      order: 'icon,name,bio,btn'
-
+      orders: [
+        'icon', 'name', 'bio', 'btn'
+      ],
     },
-    baseDom.dataset
+    JSON.parse(baseDom.dataset.iswd)
   );
 
   const clearDom = () => {
@@ -140,20 +140,24 @@ window.instaWindow = (baseDom) => {
 
   const render = () => {
     // プロフィール追加
-    const profileDom = document.createElement('div');
-    profileDom.className = 'iswd-profile';
-    baseDom.appendChild(profileDom);
+    if (options.orders.length > 0) {
+      const profileDom = document.createElement('div');
+      profileDom.className = 'iswd-profile';
+      baseDom.appendChild(profileDom);
 
-    const doms = {
-      icon: iconDom(),
-      name: usernameDom(),
-      bio: bioDom(),
-      btn: followDom()
+      const doms = {
+        icon: iconDom(),
+        name: usernameDom(),
+        bio: bioDom(),
+        btn: followDom()
+      }
+      options.orders.forEach((domName) => { 
+        if (doms[domName]) {
+          profileDom.insertAdjacentHTML('beforeend', doms[domName]);
+        }
+      })
     }
-    const orders = options.order.split(',');
-    orders.forEach((domName) => { 
-      profileDom.insertAdjacentHTML('beforeend', doms[domName]);
-    })
+
     // 写真追加
     baseDom.appendChild(imagesDom());
     // コピーライト追加
@@ -169,7 +173,7 @@ window.instaWindow = (baseDom) => {
         'box-sizing': 'border-box',
         padding: '10px',
         width:
-          Number(options.width) > 10
+          options.width > 10
             ? `${options.width}px`
             : '100%'
       },
