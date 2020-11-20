@@ -19,14 +19,7 @@ module.exports = {
         use: [
           {
             // Babel を利用する
-            loader: 'babel-loader',
-            // Babel のオプションを指定する
-            options: {
-              presets: [
-                // プリセットを指定することで、ES2019 を ES5 に変換
-                '@babel/preset-env'
-              ]
-            }
+            loader: 'babel-loader'
           }
         ]
       }
