@@ -18,7 +18,8 @@ module.exports = {
         test: /\.js$/,
         use: [
           {
-            loader: "babel-loader"
+            // Babel を利用する
+            loader: 'babel-loader'
           }
         ]
       }

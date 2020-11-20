@@ -7,8 +7,6 @@
  *
  */
 
-import 'core-js/stable';
-
 window.instaWindow = (baseDom) => {
   const instagramURL = 'https://www.instagram.com/';
   const req = new XMLHttpRequest();
