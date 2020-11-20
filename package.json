@@ -1,25 +1,22 @@
 {
   "name": "insta_window",
-  "version": "2.2.0",
+  "version": "3.3.0",
   "description": "Create Instagram widget",
   "main": "index.js",
   "dependencies": {
-    "@babel/polyfill": "^7.10.4",
-    "core-js": "^3.6.5",
+    "core-js": "^3.7.0",
     "firebase-tools": "^7.16.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "babel-loader": "^8.1.0",
-    "webpack": "^4.43.0",
+    "@babel/core": "^7.12.3",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.2.1",
+    "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },
   "scripts": {
-    "build": "webpack",
-    "serve": "firebase serve --only hosting",
-    "hosting": "firebase deploy --only hosting",
-    "deploy": "npm run build & npm run hosting"
+    "build": "webpack --config webpack.config.js"
   },
   "repository": {
     "type": "git",
