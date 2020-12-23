@@ -400,12 +400,31 @@ window.instaWindow = (baseDom) => {
       .replace(/"/g, '');
   }
 
-  // datasetからboolean取得すると文字列になるので変換
-  const toBoolean = (booleanStr) => {
-    // もともとbool値の場合はそのまま返す
-    if (typeof booleanStr === 'boolean') return booleanStr;
-
-    return booleanStr.toLowerCase() === 'true';
+  const storageAvailable = (type) => {
+    var storage;
+    try {
+      storage = window[type];
+      var x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+    } catch (e) {
+      return (
+        e instanceof DOMException &&
+        // everything except Firefox
+        (e.code === 22 ||
+          // Firefox
+          e.code === 1014 ||
+          // test name field too, because code might not be present
+          // everything except Firefox
+          e.name === 'QuotaExceededError' ||
+          // Firefox
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+        // acknowledge QuotaExceededError only if there's something already stored
+        storage &&
+        storage.length !== 0
+      );
+    }
   }
 
   req.onreadystatechange = () => {
@@ -425,6 +444,11 @@ window.instaWindow = (baseDom) => {
             url: datas[i].node.thumbnail_src
           });
         }
+        if (storageAvailable('sessionStorage')) {
+          sessionStorage.setItem('iswd_username', options.username);
+          sessionStorage.setItem('iswd_images', JSON.stringify(images));
+          sessionStorage.setItem('iswd_user', JSON.stringify(user));
+        }
         clearDom();
         render();
         renderStyle();
@@ -432,8 +456,31 @@ window.instaWindow = (baseDom) => {
     }
   };
 
-  req.open('GET', instagramURL + options.username, true);
-  req.send(null);
+  const getHttpRequest = () => {
+    req.open('GET', instagramURL + options.username, true);
+    req.send(null);
+  }
+
+  if (storageAvailable('sessionStorage')) {
+    const settionUsername = sessionStorage.getItem('iswd_username');
+    const settionImages = JSON.parse(sessionStorage.getItem('iswd_images'));
+    const settionUser = JSON.parse(sessionStorage.getItem('iswd_user'));
+    if (
+      settionUsername != options.username ||
+      settionImages == null ||
+      settionUser == null
+    ) {
+      getHttpRequest();
+    } else {
+      user = settionUser;
+      images = settionImages;
+      clearDom();
+      render();
+      renderStyle();
+    }
+  } else {
+    getHttpRequest();
+  }
 };
 
 Array.from(document.getElementsByClassName('iswd-base')).forEach((e) => {
