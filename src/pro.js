@@ -427,6 +427,11 @@ window.instaWindow = (baseDom) => {
     }
   }
 
+  const getTodayString = () => {
+    const d = new Date();
+    return `${d.getFullYear()}/${d.getMonth()}/${d.getDate()}`
+  }
+
   req.onreadystatechange = () => {
     if (req.readyState == 4) {
       // 通信の完了時
@@ -448,6 +453,7 @@ window.instaWindow = (baseDom) => {
           sessionStorage.setItem('iswd_username', options.username);
           sessionStorage.setItem('iswd_images', JSON.stringify(images));
           sessionStorage.setItem('iswd_user', JSON.stringify(user));
+          sessionStorage.setItem('iswd_stored_on', getTodayString());
         }
         clearDom();
         render();
@@ -461,19 +467,27 @@ window.instaWindow = (baseDom) => {
     req.send(null);
   }
 
-  if (storageAvailable('sessionStorage')) {
+  // 新しくデータを取得するか
+  const useNewData = () => {
     const settionUsername = sessionStorage.getItem('iswd_username');
     const settionImages = JSON.parse(sessionStorage.getItem('iswd_images'));
     const settionUser = JSON.parse(sessionStorage.getItem('iswd_user'));
-    if (
+    const storedOn = sessionStorage.getItem('iswd_stored_on');
+    
+    return (
+      getTodayString() != storedOn ||
       settionUsername != options.username ||
       settionImages == null ||
       settionUser == null
-    ) {
+    )
+  }
+
+  if (storageAvailable('sessionStorage')) {
+    if (useNewData()) {
       getHttpRequest();
     } else {
-      user = settionUser;
-      images = settionImages;
+      user = JSON.parse(sessionStorage.getItem('iswd_user'));
+      images = JSON.parse(sessionStorage.getItem('iswd_images'));
       clearDom();
       render();
       renderStyle();
