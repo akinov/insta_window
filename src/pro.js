@@ -233,6 +233,8 @@ window.instaWindow = (baseDom) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'iswd-images';
     for (const i in images) {
+      if (i >= options.total) break;
+      
       const item = document.createElement('div');
       item.className = 'iswd-images-item';
 
@@ -443,17 +445,14 @@ window.instaWindow = (baseDom) => {
         const datas = user.edge_owner_to_timeline_media.edges;
         // TODO: totalがdatasの数を上回った場合の処理(最高9個しか動かない)
         for (const i in datas) {
-          if (i >= options.total) break;
           images.push({
             shortcode: datas[i].node.shortcode,
             url: datas[i].node.thumbnail_src
           });
         }
         if (storageAvailable('sessionStorage')) {
-          sessionStorage.setItem('iswd_username', options.username);
-          sessionStorage.setItem('iswd_images', JSON.stringify(images));
-          sessionStorage.setItem('iswd_user', JSON.stringify(user));
-          sessionStorage.setItem('iswd_stored_on', getTodayString());
+          const cache = { user, images, storedOn: getTodayString() }
+          sessionStorage.setItem(sessionStorageKey(), JSON.stringify(cache));
         }
         clearDom();
         render();
@@ -467,18 +466,23 @@ window.instaWindow = (baseDom) => {
     req.send(null);
   }
 
+  const sessionStorageKey = () => {
+    return `iswd_${options.username}`
+  }
+
+  const getSessionStorage = () => {
+    return JSON.parse(sessionStorage.getItem(sessionStorageKey()))
+  }
+
   // 新しくデータを取得するか
   const useNewData = () => {
-    const settionUsername = sessionStorage.getItem('iswd_username');
-    const settionImages = JSON.parse(sessionStorage.getItem('iswd_images'));
-    const settionUser = JSON.parse(sessionStorage.getItem('iswd_user'));
-    const storedOn = sessionStorage.getItem('iswd_stored_on');
+    const cache = getSessionStorage()
     
     return (
-      getTodayString() != storedOn ||
-      settionUsername != options.username ||
-      settionImages == null ||
-      settionUser == null
+      cache == null ||
+      getTodayString() != cache.storedOn ||
+      cache.images == null ||
+      cache.user == null
     )
   }
 
@@ -486,8 +490,9 @@ window.instaWindow = (baseDom) => {
     if (useNewData()) {
       getHttpRequest();
     } else {
-      user = JSON.parse(sessionStorage.getItem('iswd_user'));
-      images = JSON.parse(sessionStorage.getItem('iswd_images'));
+      const cache = getSessionStorage()
+      user = cache.user
+      images = cache.images
       clearDom();
       render();
       renderStyle();
