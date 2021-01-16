@@ -62,6 +62,20 @@ window.instaWindow = function () {
     JSON.parse(baseDom.dataset.iswd)
   );
 
+  const getStorage = () => {
+    return JSON.parse(localStorage.getItem(localStorageKey()))
+  }
+
+
+  const localStorageKey = () => {
+    return `iswd_${options.username}`
+  }
+
+  const getTodayString = () => {
+    const d = new Date();
+    return `${d.getFullYear()}/${d.getMonth()}/${d.getDate()}`
+  }
+
   req.onreadystatechange = function () {
     if (req.readyState == 4) {
       // 通信の完了時
@@ -78,9 +92,8 @@ window.instaWindow = function () {
           });
         }
         if (storageAvailable('localStorage')) {
-          localStorage.setItem('iswd_username', options.username);
-          localStorage.setItem('iswd_images', JSON.stringify(images));
-          localStorage.setItem('iswd_user', JSON.stringify(user));
+          const cache = { user, images, storedOn: getTodayString() }
+          localStorage.setItem(localStorageKey(), JSON.stringify(cache));
         }
         clearDom();
         renderDom();
@@ -94,19 +107,25 @@ window.instaWindow = function () {
     req.send(null);
   }
 
+  // 新しくデータを取得するか
+  const useNewData = () => {
+    const cache = getStorage()
+    
+    return (
+      cache == null ||
+      getTodayString() != cache.storedOn ||
+      cache.images == null ||
+      cache.user == null
+    )
+  }
+
   if (storageAvailable('localStorage')) {
-    var settionUsername = localStorage.getItem('iswd_username');
-    var settionImages = JSON.parse(localStorage.getItem('iswd_images'));
-    var settionUser = JSON.parse(localStorage.getItem('iswd_user'));
-    if (
-      settionUsername != options.username ||
-      settionImages == null ||
-      settionUser == null
-    ) {
+    if (useNewData()) {
       getHttpRequest();
     } else {
-      user = settionUser;
-      images = settionImages;
+      const cache = getStorage()
+      user = cache.user
+      images = cache.images
       clearDom();
       renderDom();
       renderStyle();
@@ -290,7 +309,7 @@ window.instaWindow = function () {
       copy: {
         color: '#666',
         display: 'inline',
-        'font-size': '10px',
+        'font-size': '12px',
         margin: 0,
         padding: 0,
         'text-decoration': 'none',
