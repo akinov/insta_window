@@ -470,13 +470,13 @@ window.instaWindow = (baseDom) => {
     return `iswd_${options.username}`
   }
 
-  const getSessionStorage = () => {
+  const getStorage = () => {
     return JSON.parse(localStorage.getItem(localStorageKey()))
   }
 
   // 新しくデータを取得するか
   const useNewData = () => {
-    const cache = getSessionStorage()
+    const cache = getStorage()
     
     return (
       cache == null ||
@@ -490,7 +490,7 @@ window.instaWindow = (baseDom) => {
     if (useNewData()) {
       getHttpRequest();
     } else {
-      const cache = getSessionStorage()
+      const cache = getStorage()
       user = cache.user
       images = cache.images
       clearDom();
