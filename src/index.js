@@ -77,10 +77,10 @@ window.instaWindow = function () {
             url: datas[i].node.thumbnail_src,
           });
         }
-        if (storageAvailable('sessionStorage')) {
-          sessionStorage.setItem('iswd_username', options.username);
-          sessionStorage.setItem('iswd_images', JSON.stringify(images));
-          sessionStorage.setItem('iswd_user', JSON.stringify(user));
+        if (storageAvailable('localStorage')) {
+          localStorage.setItem('iswd_username', options.username);
+          localStorage.setItem('iswd_images', JSON.stringify(images));
+          localStorage.setItem('iswd_user', JSON.stringify(user));
         }
         clearDom();
         renderDom();
@@ -94,10 +94,10 @@ window.instaWindow = function () {
     req.send(null);
   }
 
-  if (storageAvailable('sessionStorage')) {
-    var settionUsername = sessionStorage.getItem('iswd_username');
-    var settionImages = JSON.parse(sessionStorage.getItem('iswd_images'));
-    var settionUser = JSON.parse(sessionStorage.getItem('iswd_user'));
+  if (storageAvailable('localStorage')) {
+    var settionUsername = localStorage.getItem('iswd_username');
+    var settionImages = JSON.parse(localStorage.getItem('iswd_images'));
+    var settionUser = JSON.parse(localStorage.getItem('iswd_user'));
     if (
       settionUsername != options.username ||
       settionImages == null ||
@@ -348,6 +348,10 @@ window.instaWindow = function () {
       );
     }
   }
+
+  function isBlackListHost() {
+
+  }
 };
 
-instaWindow();
+setTimeout(instaWindow, 3000);
