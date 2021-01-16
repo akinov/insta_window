@@ -450,9 +450,9 @@ window.instaWindow = (baseDom) => {
             url: datas[i].node.thumbnail_src
           });
         }
-        if (storageAvailable('sessionStorage')) {
+        if (storageAvailable('localStorage')) {
           const cache = { user, images, storedOn: getTodayString() }
-          sessionStorage.setItem(sessionStorageKey(), JSON.stringify(cache));
+          localStorage.setItem(localStorageKey(), JSON.stringify(cache));
         }
         clearDom();
         render();
@@ -466,12 +466,12 @@ window.instaWindow = (baseDom) => {
     req.send(null);
   }
 
-  const sessionStorageKey = () => {
+  const localStorageKey = () => {
     return `iswd_${options.username}`
   }
 
   const getSessionStorage = () => {
-    return JSON.parse(sessionStorage.getItem(sessionStorageKey()))
+    return JSON.parse(localStorage.getItem(localStorageKey()))
   }
 
   // 新しくデータを取得するか
@@ -486,7 +486,7 @@ window.instaWindow = (baseDom) => {
     )
   }
 
-  if (storageAvailable('sessionStorage')) {
+  if (storageAvailable('localStorage')) {
     if (useNewData()) {
       getHttpRequest();
     } else {
