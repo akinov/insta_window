@@ -1,15 +1,5 @@
-/*!
- * InstaWindowTool
- * https://insta-window-tool.web.app/
- *
- * Copyright Akinov and other contributors
- * Released under the MIT license
- *
- */
-
 import axios from 'axios'
 import getInstagramData from './getInstagramData'
-import '@babel/polyfill'
 
 // Polyfill Object.assign
 if (typeof Object.assign != 'function') {
