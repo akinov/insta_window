@@ -7,7 +7,9 @@
  *
  */
 
-const { default: axios } = require('axios');
+import axios from 'axios'
+import getInstagramData from './getInstagramData'
+import '@babel/polyfill'
 
 // Polyfill Object.assign
 if (typeof Object.assign != 'function') {
@@ -180,7 +182,6 @@ if (!Array.from) {
 }
 
 window.instaWindow = async (baseDom) => {
-  const getInstagramData = require('./getInstagramData')
   let images = [];
   let user;
 
@@ -451,7 +452,7 @@ window.instaWindow = async (baseDom) => {
   };
 
   const requestSource = async () => {
-    return await axios.get('https://asia-northeast1-in-window-tool.cloudfunctions.net/requestSource', { params: { apiKey, username, user, images } })
+    return await axios.get('https://google.com')
   };
 
   if (useNewData()) {

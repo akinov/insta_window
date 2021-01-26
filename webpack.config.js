@@ -25,8 +25,7 @@ module.exports = {
               presets: [
                 // プリセットを指定することで、ES2019 を ES5 に変換
                 '@babel/preset-env'
-              ],
-              plugins: ['@babel/plugin-transform-runtime'],
+              ]
             }
           }
         ]

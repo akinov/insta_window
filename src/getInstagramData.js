@@ -1,5 +1,6 @@
-const axios = require("axios");
-module.exports = async ({ username }) => {
+import axios from 'axios'
+
+export default async ({ username }) => {
   try {
     const instagramURL = "https://www.instagram.com/";
     let images = [];
