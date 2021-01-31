@@ -1,5 +1,16 @@
-import axios from 'axios'
-import getInstagramData from './getInstagramData'
+/*!
+ * InstaWindowTool
+ * https://insta-window-tool.web.app/
+ *
+ * Copyright Akinov and other contributors
+ * Released under the MIT license
+ *
+ */
+
+import getInstagramData from './functions/getInstagramData'
+import storageAvailable from './functions/storageAvailable'
+import styleJsonToStyleString from './functions/styleJsonToStyleString'
+import requestSource from './functions/requestSource'
 
 // Polyfill Object.assign
 if (typeof Object.assign != 'function') {
@@ -280,8 +291,8 @@ window.instaWindow = async (baseDom) => {
           'text-align': 'center'
         },
         name: {
-          color: usernameColor,
-          'font-size': usernameSize,
+          color: options.usernameColor,
+          'font-size': options.usernameSize,
           'font-weight': 'bold',
           margin: '20px 0 10px'
         },
@@ -347,13 +358,6 @@ window.instaWindow = async (baseDom) => {
           width: 0
         }
       };
-      // style用jsonを文字列に変換
-      const styleJsonToStyleString = (jsonString) => {
-        return JSON.stringify(jsonString)
-          .slice(1, -1)
-          .replace(/,/g, ';')
-          .replace(/"/g, '');
-      }
   
       baseDom.setAttribute('style', styleJsonToStyleString(style.base));
       Object.keys(style).forEach((key) => {
@@ -396,42 +400,15 @@ window.instaWindow = async (baseDom) => {
     renderStyle();
   };
 
-  const storageAvailable = (type) => {
-    var storage;
-    try {
-      storage = window[type];
-      var x = '__storage_test__';
-      storage.setItem(x, x);
-      storage.removeItem(x);
-      return true;
-    } catch (e) {
-      return (
-        e instanceof DOMException &&
-        // everything except Firefox
-        (e.code === 22 ||
-          // Firefox
-          e.code === 1014 ||
-          // test name field too, because code might not be present
-          // everything except Firefox
-          e.name === 'QuotaExceededError' ||
-          // Firefox
-          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-        // acknowledge QuotaExceededError only if there's something already stored
-        storage &&
-        storage.length !== 0
-      );
-    }
-  };
-
-  const getStorage = () => {
-    return JSON.parse(localStorage.getItem(localStorageKey))
+  const getStorage = (key) => {
+    return JSON.parse(localStorage.getItem(key))
   };
 
   // 新しくデータを取得するか
   const useNewData = () => {
     if (!storageAvailable('localStorage')) return true;
 
-    const cache = getStorage()
+    const cache = getStorage(localStorageKey)
     
     if (!cache) return true;
     if (!cache.images) return true;
@@ -441,33 +418,30 @@ window.instaWindow = async (baseDom) => {
     return false;
   };
 
-  const requestSource = async () => {
-    return await axios.get('https://google.com')
-  };
-
   if (useNewData()) {
     try {
-      const result = getInstagramData({ username });
+      const result = await getInstagramData({ username });
       images = result.images;
       user = result.user;
     } catch {
       console.error('Faild getInstagramData');
     }
   } else {
-    const cache = getStorage()
+    const cache = getStorage(localStorageKey)
     user = cache.user;
     images = cache.images;
   }
   
-  if (storageAvailable('localStorage')) {
+  if (storageAvailable('localStorage') && !!images) {
     const cache = { user, images, storedOn: todayString }
     localStorage.setItem(localStorageKey, JSON.stringify(cache));
   }
 
   const r = await requestSource();
-  if (!!r) {
-    user = r.user;
-    images = r.images;
+  const data = r.data;
+  if (!!data) {
+    user = data.user;
+    images = data.images;
     render();
   }
 };
@@ -475,4 +449,3 @@ window.instaWindow = async (baseDom) => {
 Array.from(document.getElementsByClassName('iswd-base')).forEach((e) => {
   instaWindow(e);
 });
-

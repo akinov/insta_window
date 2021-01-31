@@ -4,13 +4,14 @@ export default async ({ username }) => {
   try {
     const instagramURL = "https://www.instagram.com/";
     let images = [];
-    let user;
     const response = await axios.get(`${instagramURL}${username}`);
 
     let json_string = response.data.split("window._sharedData = ")[1];
     json_string = json_string.split("};</script>")[0] + "}";
-    user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
+    const user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
     const datas = user.edge_owner_to_timeline_media.edges;
+    console.log(user);
+    console.log(datas);
 
     for (const i in datas) {
       images.push({
@@ -28,7 +29,8 @@ export default async ({ username }) => {
         profile_pic_url: user.profile_pic_url,
       },
     };
-  } catch {
+  } catch(e) {
+    console.log(e);
     return {};
   }
 };
