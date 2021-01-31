@@ -74,6 +74,7 @@ window.instaWindow = async () => {
     }
   
     function renderDom() {
+      const instagramURL = 'https://www.instagram.com/';
       // プロフィール追加
       var profileDom = document.createElement('div');
       profileDom.className = 'iswd-profile';
