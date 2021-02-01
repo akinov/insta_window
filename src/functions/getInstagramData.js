@@ -10,8 +10,6 @@ export default async ({ username }) => {
     json_string = json_string.split("};</script>")[0] + "}";
     const user = JSON.parse(json_string).entry_data.ProfilePage[0].graphql.user;
     const datas = user.edge_owner_to_timeline_media.edges;
-    console.log(user);
-    console.log(datas);
 
     for (const i in datas) {
       images.push({

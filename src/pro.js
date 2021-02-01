@@ -437,7 +437,7 @@ window.instaWindow = async (baseDom) => {
     localStorage.setItem(localStorageKey, JSON.stringify(cache));
   }
 
-  const r = await requestSource();
+  const r = await requestSource({ username, user, images });
   const data = r.data;
   if (!!data) {
     user = data.user;
