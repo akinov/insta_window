@@ -1,19 +1,19 @@
 {
   "name": "insta_window",
-  "version": "3.9.0",
+  "version": "3.10.0",
   "description": "Create Instagram widget",
   "main": "index.js",
   "dependencies": {
-    "@babel/polyfill": "^7.10.4",
-    "@babel/runtime": "^7.12.5",
-    "core-js": "^3.8.2"
+    "@babel/polyfill": "^7.12.1",
+    "@babel/runtime": "^7.13.9",
+    "core-js": "^3.9.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-transform-runtime": "^7.12.10",
-    "@babel/preset-env": "^7.12.11",
-    "axios": "^0.21.1",
+    "@babel/core": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.9",
+    "@babel/preset-env": "^7.13.9",
     "babel-loader": "^8.2.2",
+    "axios": "^0.21.1",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },

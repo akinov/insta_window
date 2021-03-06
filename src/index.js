@@ -7,8 +7,6 @@
  *
  */
 
-import getInstagramData from './functions/getInstagramData'
-import storageAvailable from './functions/storageAvailable'
 import styleJsonToStyleString from './functions/styleJsonToStyleString'
 import requestSource from './functions/requestSource'
 
@@ -30,9 +28,6 @@ window.instaWindow = async () => {
     JSON.parse(baseDom.dataset.iswd)
   );
   const { username } = options;
-  const localStorageKey = `iswd_${username}`;
-  const today = new Date();
-  const todayString = `${today.getFullYear()}/${today.getMonth()}/${today.getDate()}`;
 
   const render = () => {
     function clearDom() {
@@ -238,43 +233,6 @@ window.instaWindow = async () => {
     clearDom();
     renderDom();
     renderStyle();
-  }
-
-  const getStorage = (key) => {
-    return JSON.parse(localStorage.getItem(key))
-  }
-
-  // 新しくデータを取得するか
-  const useNewData = () => {
-    if (!storageAvailable('localStorage')) return true;
-
-    const cache = getStorage(localStorageKey)
-    
-    if (!cache) return true;
-    if (!cache.images) return true;
-    if (!cache.user) return true;
-    if (todayString != cache.storedOn) return true;
-
-    return false;
-  };
-
-  if (useNewData()) {
-    try {
-      const result = await getInstagramData({ username });
-      images = result.images;
-      user = result.user;
-    } catch {
-      console.error('Faild getInstagramData');
-    }
-  } else {
-    const cache = getStorage(localStorageKey)
-    user = cache.user;
-    images = cache.images;
-  }
-  
-  if (storageAvailable('localStorage') && !!images) {
-    const cache = { user, images, storedOn: todayString }
-    localStorage.setItem(localStorageKey, JSON.stringify(cache));
   }
 
   const r = await requestSource({ username, user, images });
